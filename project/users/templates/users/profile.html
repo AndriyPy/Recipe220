@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile — SmartRecipe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --orange: #F58220;
+            --green: #2D4635;
+            --bg: #F9F9F7;
+            --gray: #666;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--green);
+            margin-bottom: 30px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+        }
+
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: var(--gray);
+        }
+
+        .info p {
+            margin-bottom: 14px;
+            font-size: 15px;
+            color: var(--gray);
+        }
+
+        .info strong {
+            color: var(--green);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--orange);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .avatar {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>My Profile</h1>
+
+    <div class="profile-grid">
+        <div class="avatar">
+            👤
+        </div>
+
+        <div class="info">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+
+            {% if user.social_auth.exists or user.googlessouser %}
+                <span class="badge">Signed in with Google</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
