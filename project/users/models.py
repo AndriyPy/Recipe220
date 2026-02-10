@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class Profile(AbstractUser):
     gender = models.CharField(
-        max_length=6,
+        max_length=8,
         choices=[
             ("Male", "Male"),
             ("Female", "Female"),
@@ -14,11 +14,10 @@ class Profile(AbstractUser):
         null=True
     )
 
-
     birth_date = models.DateField(blank=True, null=True, verbose_name="Date of birth")
 
     country = models.CharField(
-        max_length=6,
+        max_length=8,
         choices=[
             ("Ukraine", "Ukraine"),
             ("Germany", "Germany"),

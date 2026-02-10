@@ -112,6 +112,9 @@
             {% if user.social_auth.exists or user.googlessouser %}
                 <span class="badge">Signed in with Google</span>
             {% endif %}
+
+            <a href="/logout">logout</a>
+
         </div>
     </div>
 </div>

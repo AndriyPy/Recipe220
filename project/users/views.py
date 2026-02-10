@@ -27,7 +27,7 @@ def login_view(request: HttpRequest):
         if form.is_valid():
             user = form.cleaned_data['user']
             login(request, user)
-            return redirect('home') #test
+            return redirect('/')
     else:
         form = UserLoginForm()
 
