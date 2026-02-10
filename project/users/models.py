@@ -31,3 +31,24 @@ class Profile(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class EmailVerification(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='verifications')
+    code = models.CharField(max_length=6)
+    expires_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+   # attempts = models.PositiveSmallIntegerField(default=0)
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    def __str__(self):
+        return f"Email verification for {self.user}"
+
+    def is_valid(self):
+        return (
+            not self.is_used and
+            timezone.now() <= self.expires_at
+        )
