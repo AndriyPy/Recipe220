@@ -132,7 +132,7 @@ def email_verification_view(request: HttpRequest):
 #        'Test Email',
 #        'Hello! This is a test.',
 #        settings.EMAIL_HOST_USER,
-#        ['@gmail.com'],
+#        ['@gmail.com'],  (получатель)
 #       fail_silently=False,
 #   return HttpResponse("Email sent!")
 
