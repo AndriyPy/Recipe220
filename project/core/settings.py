@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'users',
+    'AI_assistent',
 
     "django_google_sso",
 
