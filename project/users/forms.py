@@ -81,4 +81,19 @@ class UserLoginForm(forms.Form):
         return cleaned_data
 
 
+class EmailVerificationForm(forms.Form):
+    code = forms.CharField(
+        max_length=6,
+        min_length=6,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Enter 6-digit code",
+        })
+    )
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        if not code.isdigit():
+            raise forms.ValidationError('The code must only consist of numbers')
+        return code
 
