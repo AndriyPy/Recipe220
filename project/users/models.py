@@ -39,7 +39,6 @@ class EmailVerification(models.Model):
     expires_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_used = models.BooleanField(default=False)
-   # attempts = models.PositiveSmallIntegerField(default=0)
 
     def is_expired(self):
         return timezone.now() > self.expires_at
