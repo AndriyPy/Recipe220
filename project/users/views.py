@@ -69,7 +69,7 @@ def login_view(request: HttpRequest):
 
 def logout_view(request: HttpRequest):
     logout(request)
-    return redirect('login') #test
+    return redirect('login')
 
 def main_page_view(request: HttpRequest):
     return render(request, "users/main.html")
