@@ -79,4 +79,60 @@ def profile_view(request: HttpRequest):
     return render(request, "users/profile.html")
 
 
+def email_verification_view(request: HttpRequest):
+    user_id = request.session.get("verify_user_id")
+    if not user_id:
+        messages.error(request, 'Session expired. Please register again.')
+        return redirect("register")
+
+    verification = EmailVerification.objects.filter(
+        user_id=user_id,
+        is_used=False
+    ).order_by("-created_at").first()
+
+    if not verification:
+        messages.error(request, 'Verification code not found or expired.')
+        return redirect("register")
+
+    if request.method == "POST":
+        form = EmailVerificationForm(request.POST)
+        if form.is_valid():
+            if not verification.is_valid():
+                messages.error(request, 'Code has expired')
+                return redirect("register")
+
+            if form.cleaned_data["code"] == verification.code:
+                user = verification.user
+                user.is_active = True
+                user.save()
+
+                verification.is_used = True
+                verification.save()
+
+                request.session.pop("verify_user_id", None)
+                login(request, user)
+                messages.success(request, 'Email verification has been successfully completed.')
+
+                return redirect("main")
+            else:
+                messages.error(request, 'The verification code you entered is invalid.')
+    else:
+        form = EmailVerificationForm()
+
+    context = {
+        "form": form,
+        "masked_email": verification.user.email[:3] + "***" + verification.user.email[verification.user.email.find('@'):]
+    }
+
+    return render(request, "users/verify_email.html", context)
+
+# ====================TEST!!!=================== 
+# def test_email_view(request):
+#    send_mail(
+#        'Test Email',
+#        'Hello! This is a test.',
+#        settings.EMAIL_HOST_USER,
+#        ['@gmail.com'],
+#       fail_silently=False,
+#   return HttpResponse("Email sent!")
 
