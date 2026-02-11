@@ -6,9 +6,10 @@
     <title>SmartRecipe — Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/jdx5Zczz/rounded-in-photoretrica.png">
 
     <style>
         :root {
@@ -17,6 +18,7 @@
             --light-green-bg: #89A08B;
             --bg-light: #F9F9F7;
             --text-gray: #666;
+            --border-color: #E0E0E0;
         }
 
         * {
@@ -41,9 +43,12 @@
             padding: 18px 60px;
             background: white;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -52,14 +57,16 @@
             color: var(--dark-green);
         }
 
-        .logo i {
+        .logo-icon {
             color: var(--primary-orange);
             font-size: 26px;
+            display: flex;
+            align-items: center;
         }
 
         .nav-links {
             display: flex;
-            gap: 28px;
+            gap: 30px;
         }
 
         .nav-links a {
@@ -67,12 +74,60 @@
             color: #555;
             font-size: 14px;
             font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+
+        /* АВТОРИЗАЦИЯ — ТОЧНО КАК В ПРИМЕРЕ */
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-login {
+            text-decoration: none;
+            color: #000;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 8px 16px;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: var(--primary-orange);
+        }
+
+        .btn-signup {
+            background: var(--primary-orange);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 8px rgba(245, 130, 32, 0.2);
+        }
+
+        .btn-signup:hover {
+            background: #e6731a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 130, 32, 0.3);
         }
 
         .nav-user {
             font-size: 14px;
             font-weight: 600;
             color: var(--dark-green);
+            background: rgba(137, 160, 139, 0.1);
+            padding: 8px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(45, 70, 53, 0.1);
+            letter-spacing: 0.3px;
         }
 
         /* HERO */
@@ -128,6 +183,13 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 14px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(245, 130, 32, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #e6731a;
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -138,6 +200,12 @@
             text-decoration: none;
             font-weight: 700;
             font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark-green);
+            color: white;
         }
 
         .hero-visual {
@@ -149,9 +217,18 @@
         }
 
         @media (max-width: 900px) {
+            nav {
+                padding: 18px 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
             .hero-card {
                 grid-template-columns: 1fr;
                 text-align: center;
+                padding: 40px 30px;
             }
 
             .hero-actions {
@@ -159,24 +236,46 @@
                 flex-wrap: wrap;
             }
         }
+
+        @media (max-width: 600px) {
+            .logo-container span:last-child {
+                display: none;
+            }
+
+            .nav-auth {
+                gap: 10px;
+            }
+
+            .btn-signup {
+                padding: 10px 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">
-        <i class="fas fa-carrot"></i>
+    <div class="logo-container">
+        <span class="logo-icon"><i class="fas fa-carrot"></i></span>
         <span>SmartRecipe</span>
     </div>
 
     <div class="nav-links">
         <a href="#">RECIPES</a>
         <a href="#">DIET</a>
-        <a href="#">About</a>
+        <a href="#">COMMUNITY</a>
+        <a href="#">ABOUT</a>
     </div>
 
-    <div class="nav-user">
-        Hello{% if user.is_authenticated %}, {{ user.username }}{% endif %}
+    <div class="nav-auth">
+        {% if user.is_authenticated %}
+        <div class="nav-user">
+            Hello, {{ user.username }}
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn-login">LOG IN</a>
+        <a href="{% url 'registration' %}" class="btn-signup">SIGN UP</a>
+        {% endif %}
     </div>
 </nav>
 
@@ -192,7 +291,6 @@
             <div class="hero-actions">
                 <a href="#" class="btn-primary">Explore Recipes</a>
                 <a href="{% url 'profile' %}" class="btn-secondary">My Profile</a>
-
             </div>
         </div>
 
