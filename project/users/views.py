@@ -83,7 +83,7 @@ def email_verification_view(request: HttpRequest):
     user_id = request.session.get("verify_user_id")
     if not user_id:
         messages.error(request, 'Session expired. Please register again.')
-        return redirect("register")
+        return redirect("registration")
 
     verification = EmailVerification.objects.filter(
         user_id=user_id,
@@ -92,14 +92,14 @@ def email_verification_view(request: HttpRequest):
 
     if not verification:
         messages.error(request, 'Verification code not found or expired.')
-        return redirect("register")
+        return redirect("registration")
 
     if request.method == "POST":
         form = EmailVerificationForm(request.POST)
         if form.is_valid():
             if not verification.is_valid():
                 messages.error(request, 'Code has expired')
-                return redirect("register")
+                return redirect("registration")
 
             if form.cleaned_data["code"] == verification.code:
                 user = verification.user
