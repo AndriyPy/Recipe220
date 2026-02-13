@@ -8,7 +8,7 @@ def recipe_ai_view(request):
     ingredients = request.GET.get("ingredients")
 
     if ingredients:
-        with OpenRouter(api_key="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") as client:
+        with OpenRouter(api_key="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") as client:
             response = client.chat.send(
                 model="mistralai/mistral-7b-instruct",
                 messages=[
