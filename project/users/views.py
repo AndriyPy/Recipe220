@@ -136,3 +136,6 @@ def email_verification_view(request: HttpRequest):
 #       fail_silently=False,
 #   return HttpResponse("Email sent!")
 
+def about_view(request: HttpRequest):
+    return render(request, "users/about.html")
+
