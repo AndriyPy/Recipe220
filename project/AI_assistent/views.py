@@ -1,14 +1,14 @@
-
 from django.shortcuts import render
 from openrouter import OpenRouter
 import os
+from recipe.models import Recipes
 
 def recipe_ai_view(request):
     recipe = None
     ingredients = request.GET.get("ingredients")
 
     if ingredients:
-        with OpenRouter(api_key="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") as client:
+        with OpenRouter(api_key="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") as client:
             response = client.chat.send(
                 model="mistralai/mistral-7b-instruct",
                 messages=[
@@ -18,6 +18,15 @@ def recipe_ai_view(request):
             )
             recipe = response.choices[0].message.content
 
+        if request.user.is_authenticated:
+            Recipes.objects.create(
+                user = request.user,
+                ingredients = ingredients,
+                recipe = recipe
+            )
+
     return render(request, "ai/recipe_ai.html", {"recipe": recipe})
+
+
 
 

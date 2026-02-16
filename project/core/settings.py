@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'users',
     'AI_assistent',
+    'recipe',
 
     "django_google_sso",
 
