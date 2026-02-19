@@ -139,3 +139,8 @@ def email_verification_view(request: HttpRequest):
 def about_view(request: HttpRequest):
     return render(request, "users/about.html")
 
+
+def recipe_list(request):
+    recipes = Recipe.objects.using('recipes_db').all()
+    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+
