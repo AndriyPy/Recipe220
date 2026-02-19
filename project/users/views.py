@@ -141,6 +141,11 @@ def about_view(request: HttpRequest):
 
 
 def recipe_list(request):
-    recipes = Recipe.objects.using('recipes_db').all()
-    return render(request, 'recipes/recipe_list.html', {'recipes': recipes})
+    recipes_list = Recipe.objects.using('recipes_db').all()
+    
+    paginator = Paginator(recipes_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'recipes/recipe_list.html', {'page_obj': page_obj})
 
