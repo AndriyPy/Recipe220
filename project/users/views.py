@@ -143,7 +143,7 @@ def about_view(request: HttpRequest):
 def recipe_list(request):
     recipes_list = Recipe.objects.using('recipes_db').all()
     
-    paginator = Paginator(recipes_list, 10)
+    paginator = Paginator(recipes_list, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
