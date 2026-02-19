@@ -11,4 +11,5 @@ urlpatterns = [
     path('email-verify/', views.email_verification_view, name='verify_email'),
     #path('test-email/', views.test_email_view, name='test_email')  test
     path('about/', views.about_view, name='about'),
+    path('recipes/', views.recipe_list, name='recipe_list'),
 ]
