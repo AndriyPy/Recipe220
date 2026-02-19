@@ -19,13 +19,21 @@
         .nav-links a.active{color:#F58220;}
         .nav-auth{display:flex;align-items:center;gap:20px;}
         .btn-login{text-decoration:none;color:#000;font-weight:700;font-size:13px;padding:8px 16px;}
-        .btn-signup{background:#F58220;color:white;padding:10px 25px;border-radius:25px;text-decoration:none;font-weight:700;font-size:13px;}
+        .btn-login:hover{color:#F58220;}
+        .btn-signup{background:#F58220;color:white;padding:10px 25px;border-radius:25px;text-decoration:none;font-weight:700;font-size:13px;box-shadow:0 2px 8px rgba(245,130,32,0.2);transition:all 0.2s;}
+        .btn-signup:hover{background:#e6731a;transform:translateY(-1px);box-shadow:0 4px 12px rgba(245,130,32,0.3);}
         .nav-user{font-size:14px;font-weight:600;color:#2D4635;background:rgba(137,160,139,0.1);padding:8px 20px;border-radius:25px;border:1px solid rgba(45,70,53,0.1);}
         .hero-section{background:linear-gradient(rgba(45,70,53,0.7),rgba(45,70,53,0.8)),url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1780&auto=format&fit=crop')center/cover;background-attachment:fixed;padding:120px 20px;text-align:center;color:white;}
         .hero-content{max-width:800px;margin:0 auto;}
         .hero-content h1{font-family:'Playfair Display',serif;font-size:64px;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,0.3);}
         .hero-content h1 span{color:#F58220;}
         .hero-subtitle{font-size:22px;font-style:italic;text-shadow:1px 1px 2px rgba(0,0,0,0.3);}
+        .search-container{max-width:600px;margin:-30px auto 40px;position:relative;z-index:10;}
+        .search-box{background:white;border-radius:60px;padding:8px 8px 8px 25px;box-shadow:0 10px 30px rgba(0,0,0,0.1);display:flex;align-items:center;border:1px solid rgba(0,0,0,0.05);}
+        .search-box i{color:#F58220;font-size:18px;}
+        .search-box input{flex:1;border:none;padding:15px;font-size:16px;outline:none;background:transparent;}
+        .search-box button{background:#2D4635;color:white;border:none;padding:12px 35px;border-radius:40px;font-weight:600;font-size:15px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+        .search-box button:hover{background:#1f3528;transform:translateY(-2px);box-shadow:0 5px 15px rgba(45,70,53,0.3);}
         .recipes-section{padding:60px 50px;max-width:1400px;margin:0 auto;width:100%;}
         .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px;}
         .recipe-card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 5px 20px rgba(0,0,0,0.03);transition:transform 0.2s,box-shadow 0.2s;border:1px solid rgba(0,0,0,0.05);display:flex;flex-direction:column;}
@@ -41,56 +49,12 @@
         .empty-state{text-align:center;padding:80px 20px;background:white;border-radius:20px;grid-column:1/-1;}
         .empty-state i{font-size:70px;color:#89A08B;margin-bottom:25px;}
         .empty-state p{color:#666;font-size:20px;}
-
-        /* Pagination styles */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-        }
-        .pagination a, .pagination span {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 40px;
-            height: 40px;
-            padding: 0 12px;
-            border-radius: 10px;
-            background: white;
-            color: #2D4635;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid #e0e0e0;
-            transition: all 0.2s;
-        }
-        .pagination a:hover {
-            background: #F58220;
-            color: white;
-            border-color: #F58220;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(245,130,32,0.2);
-        }
-        .pagination .current {
-            background: #2D4635;
-            color: white;
-            border-color: #2D4635;
-        }
-        .pagination .step-links {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .pagination-info {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-top: 20px;
-        }
-
+        .pagination{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:50px;flex-wrap:wrap;}
+        .pagination a,.pagination span{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;padding:0 12px;border-radius:10px;background:white;color:#2D4635;text-decoration:none;font-weight:600;font-size:14px;border:1px solid #e0e0e0;transition:all 0.2s;}
+        .pagination a:hover{background:#F58220;color:white;border-color:#F58220;transform:translateY(-2px);box-shadow:0 4px 10px rgba(245,130,32,0.2);}
+        .pagination .current{background:#2D4635;color:white;border-color:#2D4635;}
+        .pagination .step-links{display:flex;gap:10px;align-items:center;}
+        .pagination-info{text-align:center;color:#666;font-size:14px;margin-top:20px;}
         @media (max-width:900px){
             nav{padding:15px 30px;}
             .nav-links{display:none;}
@@ -98,6 +62,10 @@
             .hero-content h1{font-size:48px;}
             .hero-subtitle{font-size:20px;}
             .recipes-section{padding:40px 20px;}
+            .search-container{margin:-20px 20px 30px;}
+            .search-box{padding:5px 5px 5px 20px;}
+            .search-box input{padding:12px 10px;font-size:15px;}
+            .search-box button{padding:10px 25px;font-size:14px;}
         }
         @media (max-width:600px){
             .logo-container span:last-child{display:none;}
@@ -106,12 +74,10 @@
             .hero-content h1{font-size:36px;}
             .hero-subtitle{font-size:18px;}
             .recipe-grid{grid-template-columns:1fr;}
-            .pagination a, .pagination span {
-                min-width: 35px;
-                height: 35px;
-                padding: 0 8px;
-                font-size: 13px;
-            }
+            .pagination a,.pagination span{min-width:35px;height:35px;padding:0 8px;font-size:13px;}
+            .search-box{flex-direction:column;background:transparent;box-shadow:none;padding:0;gap:10px;}
+            .search-box input{width:100%;background:white;border-radius:40px;padding:15px 20px;}
+            .search-box button{width:100%;justify-content:center;}
         }
         @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
         .hero-content,.recipe-card{animation:fadeInUp 0.6s ease-out;}
@@ -120,7 +86,7 @@
 <body>
 <nav>
     <div class="logo-container"><span class="logo-icon"><i class="fas fa-carrot"></i></span><span>SmartRecipe</span></div>
-    <div class="nav-links"><a href="#">COMPASS</a><a href="{% url 'recipe_list' %}" class="active">RECIPES</a><a href="#">DIET</a><a href="#">COMMUNITY</a></div>
+    <div class="nav-links"><a href="{% url 'recipe_list' %}">RECIPES</a><a href="#">DIET</a><a href="#">COMMUNITY</a><a href="{% url 'about' %}">ABOUT</a></div>
     <div class="nav-auth">
         {% if user.is_authenticated %}
         <div class="nav-user"><i class="fas fa-user"></i> {{ user.username }}</div>
@@ -137,6 +103,14 @@
         <p class="hero-subtitle">"Discover delicious and healthy recipes for every occasion"</p>
     </div>
 </section>
+
+<div class="search-container">
+    <form class="search-box" method="get" onsubmit="event.preventDefault();">
+        <i class="fas fa-search"></i>
+        <input type="text" name="search" placeholder="Search recipes by name, ingredients, cuisine..." value="{{ request.GET.search }}">
+        <button type="submit">Search <i class="fas fa-arrow-right"></i></button>
+    </form>
+</div>
 
 <section class="recipes-section">
     <div class="recipe-grid">
@@ -174,7 +148,6 @@
                 <a href="?page=1"><i class="fas fa-angle-double-left"></i></a>
                 <a href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i></a>
             {% endif %}
-
             {% for num in page_obj.paginator.page_range %}
                 {% if page_obj.number == num %}
                     <span class="current">{{ num }}</span>
@@ -182,16 +155,13 @@
                     <a href="?page={{ num }}">{{ num }}</a>
                 {% endif %}
             {% endfor %}
-
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}"><i class="fas fa-angle-right"></i></a>
                 <a href="?page={{ page_obj.paginator.num_pages }}"><i class="fas fa-angle-double-right"></i></a>
             {% endif %}
         </div>
     </div>
-    <div class="pagination-info">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-    </div>
+    <div class="pagination-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
     {% endif %}
 </section>
 </body>
