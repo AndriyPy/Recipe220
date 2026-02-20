@@ -8,13 +8,45 @@ import random
 from datetime import timedelta
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
-from django.conf import settings
 
 from .forms import UserRegisterForm, UserLoginForm, EmailVerificationForm
 from .models import Profile, EmailVerification
 
+import requests
+from django.conf import settings
+
+
+def verify_turnstile(token: str):
+    if not token:
+        return False
+
+    response = requests.request.post(
+          "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        data={
+            "secret": settings.TURNSTILE_SECRET_KEY,
+            "response": token
+        },
+        timeout=5
+    )
+
+    result = response.json()
+    return result.get("success", False)
+
+
+
+
 def register_view(request: HttpRequest):
     if request.method == "POST":
+        token = request.POST.get("cf-turnstile-response")
+
+        if not verify_turnstile(token):
+            messages.error(request, "Bot verification failed.")
+            form = UserRegisterForm(request.POST)
+            return render(request, "users/register.html", {
+                "form": form,
+                "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY
+            })
+
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
@@ -50,11 +82,21 @@ def register_view(request: HttpRequest):
     else:
         form = UserRegisterForm()
 
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'users/register.html', {'form': form, "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY})
 
 
 def login_view(request: HttpRequest):
     if request.method == 'POST':
+
+        token = request.POST.get("cf-turnstile-response")
+        if not verify_turnstile(token):
+            messages.error(request, "Bot verification failed.")
+            form = UserLoginForm(request.POST)
+            return render(request, "users/login.html", {
+                "form": form,
+                "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY
+            })
+
         form = UserLoginForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data['user']
@@ -63,7 +105,7 @@ def login_view(request: HttpRequest):
     else:
         form = UserLoginForm()
 
-    return render(request, 'users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form, 'TURNSTILE_SITE_KEY': settings.TURNSTILE_SITE_KEY})
 
 
 

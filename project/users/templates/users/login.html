@@ -212,7 +212,9 @@
             animation: fadeInUp 0.5s ease-out;
         }
     </style>
+
 </head>
+
 <body>
 
 <nav>
@@ -279,6 +281,13 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div class="cf-turnstile"
+                         data-sitekey="{{ TURNSTILE_SITE_KEY }}">
+                    </div>
+                </div>
 
                     <button type="submit" class="btn-submit">
                         SIGN IN &nbsp; <i class="fas fa-arrow-right"></i>
@@ -298,5 +307,7 @@
         </div>
     </section>
 </main>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </body>
 </html>

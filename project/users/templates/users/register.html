@@ -144,7 +144,14 @@
                     <button type="submit" class="btn-submit">
                         START HEALTHY JOURNEY &nbsp; <i class="fas fa-arrow-right"></i>
                     </button>
+
+
+                    <div class="cf-turnstile"
+                        data-sitekey="{{ TURNSTILE_SITE_KEY }}">
+                    </div>
+
                 </form>
+
 
 
                 <div class="divider">OR SIGN UP WITH</div>
@@ -161,5 +168,7 @@
             </div>
         </section>
     </main>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </body>
 </html>
