@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth import login, logout
@@ -10,7 +11,7 @@ from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 
 from .forms import UserRegisterForm, UserLoginForm, EmailVerificationForm
-from .models import Profile, EmailVerification
+from .models import Profile, EmailVerification, Recipe
 
 import requests
 from django.conf import settings
