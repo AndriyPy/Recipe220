@@ -30,7 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+OPEN_ROUTER = os.getenv("OPEN_ROUTER")
 
 INSTALLED_APPS = [
     'django.contrib.admin',

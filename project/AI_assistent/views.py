@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from openrouter import OpenRouter
 import os
+from django.conf import settings
 
 
 def recipe_ai_view(request):
@@ -8,7 +9,7 @@ def recipe_ai_view(request):
     ingredients = request.GET.get("ingredients")
 
     if ingredients:
-        with OpenRouter(api_key="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") as client:
+        with OpenRouter(api_key=settings.OPEN_ROUTER) as client:
             response = client.chat.send(
                 model="mistralai/mistral-7b-instruct",
                 messages=[
