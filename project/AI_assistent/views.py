@@ -2,6 +2,7 @@ from django.shortcuts import render
 from openrouter import OpenRouter
 import os
 from django.conf import settings
+from ..users.models import Recipe
 
 
 def recipe_ai_view(request):
@@ -75,5 +76,12 @@ INPUT TO PROCESS: {ingredients}"""}
                 max_tokens=600
             )
             recipe = response.choices[0].message.content
+
+            if request.user.is_authenticated:
+                Recipe.objects.create(
+                    user=request.user,
+                    ingredients=ingredients,
+                    recipe=recipe
+                )
 
     return render(request, "ai/recipe_ai.html", {"recipe": recipe})
