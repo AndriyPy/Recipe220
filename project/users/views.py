@@ -116,10 +116,15 @@ def login_view(request: HttpRequest):
 
 @login_required
 def edit_profile(request):
+    user = request.user
     if request.method == "POST":
-        form = UserEditProfileForm(request.POST)
+        form = UserEditProfileForm()
         if form.is_valid():
-            form.save()
+            user.username = form.cleaned_data.get('username')
+            user.gender = form.cleaned_data.get('gender')
+            user.birth_date = form.cleaned_data.get('birth_date')
+            user.country = form.cleaned_data.get('country')
+            user.save()
             return redirect("profile")
     else:
         form = UserEditProfileForm()
