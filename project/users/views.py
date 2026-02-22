@@ -17,7 +17,7 @@ import requests
 from django.conf import settings
 
 from django_ratelimit.decorators import ratelimit
-
+from rapidfuzz import process, fuzz
 
 
 
@@ -194,11 +194,34 @@ def about_view(request: HttpRequest):
 
 
 def recipe_list(request):
-    recipes_list = Recipe.objects.using('recipes_db').all()
-    
+    db_name = 'recipes_db'
+    search_query = request.GET.get('search', '').strip()
+
+    if search_query:
+        all_recipes = list(Recipe.objects.using(db_name).values_list('id', 'name'))
+
+        matches = process.extract(
+                search_query,
+                [r[1] for r in all_recipes],
+                scorer=fuzz.WRatio,
+                limit=50,
+                score_cutoff=65
+            )
+
+        matched_ids = [all_recipes[m[2]][0] for m in matches]
+
+        preserved_order = {pk: i for i, pk in enumerate(matched_ids)}
+        queryset = Recipe.objects.using(db_name).filter(id__in=matched_ids)
+        recipes_list = sorted(queryset, key=lambda x: preserved_order.get(x.id))
+    else:
+        recipes_list = Recipe.objects.using(db_name).all()
+
     paginator = Paginator(recipes_list, 9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'recipes/recipe_list.html', {'page_obj': page_obj})
+    return render(request, 'recipes/recipe_list.html', {
+        'page_obj': page_obj,
+        'search_query': search_query
+    })
 
