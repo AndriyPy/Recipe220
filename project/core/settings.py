@@ -104,6 +104,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    #    'recipes_db': {
+    #        'ENGINE': 'django.db.backends.sqlite3',
+    #       'NAME': BASE_DIR / 'my_recipes.db',
+    # }                     soon!!!
 }
 
 
