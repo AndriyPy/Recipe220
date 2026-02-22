@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from openrouter import OpenRouter
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .models import Recipes
+
 
 
 def recipe_ai_view(request):
@@ -93,8 +94,8 @@ def generated_recipe_view(request):
     recipes = request.user.recipes.all().order_by("-created_at")
     return render(request, "ai/my_recipes.html", {"recipes": recipes})
 
-@login_required
+@login_required()
 def delete_recipe_view(request, id):
-    recipe = Recipes.objects.get(id=id, user=request.user)
+    recipe = get_object_or_404(Recipes, id=id, user=request.user)
     recipe.delete()
-    return redirect("my_recipes")
+    return redirect("ai_history")
