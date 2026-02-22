@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from openrouter import OpenRouter
-import os
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from ..users.models import Recipe
+from .models import Recipes
 
 
 def recipe_ai_view(request):
@@ -78,10 +78,23 @@ INPUT TO PROCESS: {ingredients}"""}
             recipe = response.choices[0].message.content
 
             if request.user.is_authenticated:
-                Recipe.objects.create(
+                Recipes.objects.create(
                     user=request.user,
                     ingredients=ingredients,
                     recipe=recipe
                 )
 
     return render(request, "ai/recipe_ai.html", {"recipe": recipe})
+
+
+
+@login_required()
+def generated_recipe_view(request):
+    recipes = request.user.recipes.all().order_by("-created_at")
+    return render(request, "ai/my_recipes.html", {"recipes": recipes})
+
+@login_required
+def delete_recipe_view(request, id):
+    recipe = Recipes.objects.get(id=id, user=request.user)
+    recipe.delete()
+    return redirect("my_recipes")
