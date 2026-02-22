@@ -9,7 +9,7 @@ urlpatterns = [
     path("", views.main_page_view, name="main"),
     path("profile/", views.profile_view, name="profile"),
     path('email-verify/', views.email_verification_view, name='verify_email'),
-    #path('test-email/', views.test_email_view, name='test_email')  test
     path('about/', views.about_view, name='about'),
     path('recipes/', views.recipe_list, name='recipe_list'),
+    path("edit-profile/", views.edit_profile, name="edit_profile")
 ]

@@ -10,18 +10,22 @@ from datetime import timedelta
 from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 
-from .forms import UserRegisterForm, UserLoginForm, EmailVerificationForm
+from .forms import UserRegisterForm, UserLoginForm, EmailVerificationForm, UserEditProfileForm
 from .models import Profile, EmailVerification, Recipe
 
 import requests
 from django.conf import settings
+
+from django_ratelimit.decorators import ratelimit
+
+
 
 
 def verify_turnstile(token: str):
     if not token:
         return False
 
-    response = requests.request.post(
+    response = requests.post(
           "https://challenges.cloudflare.com/turnstile/v0/siteverify",
         data={
             "secret": settings.TURNSTILE_SECRET_KEY,
@@ -35,7 +39,7 @@ def verify_turnstile(token: str):
 
 
 
-
+@ratelimit(key='ip', rate='3/m', block=True)
 def register_view(request: HttpRequest):
     if request.method == "POST":
         token = request.POST.get("cf-turnstile-response")
@@ -86,6 +90,7 @@ def register_view(request: HttpRequest):
     return render(request, 'users/register.html', {'form': form, "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY})
 
 
+@ratelimit(key='ip', rate='3/m', block=True)
 def login_view(request: HttpRequest):
     if request.method == 'POST':
 
@@ -107,6 +112,20 @@ def login_view(request: HttpRequest):
         form = UserLoginForm()
 
     return render(request, 'users/login.html', {'form': form, 'TURNSTILE_SITE_KEY': settings.TURNSTILE_SITE_KEY})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == "POST":
+        form = UserEditProfileForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("profile")
+    else:
+        form = UserEditProfileForm()
+
+    return render(request, "users/edit_profile.html", {"form": form})
+
 
 
 
@@ -169,15 +188,6 @@ def email_verification_view(request: HttpRequest):
 
     return render(request, "users/verify_email.html", context)
 
-# ====================TEST!!!=================== 
-# def test_email_view(request):
-#    send_mail(
-#        'Test Email',
-#        'Hello! This is a test.',
-#        settings.EMAIL_HOST_USER,
-#        ['@gmail.com'],  (получатель)
-#       fail_silently=False,
-#   return HttpResponse("Email sent!")
 
 def about_view(request: HttpRequest):
     return render(request, "users/about.html")

@@ -81,6 +81,17 @@ class UserLoginForm(forms.Form):
         return cleaned_data
 
 
+class UserEditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'gender', 'birth_date', 'country']
+        widgets = {
+            'birth_date': forms.DateInput(attrs={'type': 'date'}),
+            'gender': forms.Select(),
+            'country': forms.Select(),
+        }
+
+
 class EmailVerificationForm(forms.Form):
     code = forms.CharField(
         max_length=6,

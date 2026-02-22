@@ -88,7 +88,6 @@ INPUT TO PROCESS: {ingredients}"""}
     return render(request, "ai/recipe_ai.html", {"recipe": recipe})
 
 
-
 @login_required()
 def generated_recipe_view(request):
     recipes = request.user.recipes.all().order_by("-created_at")
