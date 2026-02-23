@@ -118,7 +118,7 @@ def login_view(request: HttpRequest):
 def edit_profile(request):
     user = request.user
     if request.method == "POST":
-        form = UserEditProfileForm()
+        form = UserEditProfileForm(data=request.POST)
         if form.is_valid():
             user.username = form.cleaned_data.get('username')
             user.gender = form.cleaned_data.get('gender')
@@ -126,12 +126,15 @@ def edit_profile(request):
             user.country = form.cleaned_data.get('country')
             user.save()
             return redirect("profile")
+
     else:
-        form = UserEditProfileForm()
+        form = UserEditProfileForm(initial={
+            'username': user.username,
+            'gender': user.gender,
+            'birth_date': user.birth_date,
+            'country': user.country})
 
     return render(request, "users/edit_profile.html", {"form": form})
-
-
 
 
 def logout_view(request: HttpRequest):
@@ -144,6 +147,9 @@ def main_page_view(request: HttpRequest):
 @login_required
 def profile_view(request: HttpRequest):
     return render(request, "users/profile.html")
+
+
+
 
 
 def email_verification_view(request: HttpRequest):

@@ -31,7 +31,8 @@
     <div class="card">
         <h2>Edit Profile</h2>
 
-        <form method="POST">
+        <form method="POST" action="{% url 'edit_profile' %}">
+
             {% csrf_token %}
 
             <div class="form-group">
