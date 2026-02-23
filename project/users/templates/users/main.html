@@ -19,6 +19,8 @@
             --bg-light: #F9F9F7;
             --text-gray: #666;
             --border-color: #E0E0E0;
+            --ai-gradient-start: #2D4635;  /* темно-зеленый */
+            --ai-gradient-end: #89A08B;     /* светло-зеленый */
         }
 
         * {
@@ -80,7 +82,6 @@
             color: var(--primary-orange);
         }
 
-        /* АВТОРИЗАЦИЯ — ТОЧНО КАК В ПРИМЕРЕ */
         .nav-auth {
             display: flex;
             align-items: center;
@@ -149,6 +150,11 @@
             gap: 50px;
         }
 
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+        }
+
         .hero-text h1 {
             font-family: 'Playfair Display', serif;
             font-size: 46px;
@@ -171,6 +177,7 @@
         .hero-actions {
             display: flex;
             gap: 18px;
+            margin-bottom: 20px;
         }
 
         .btn-primary {
@@ -183,6 +190,8 @@
             font-size: 14px;
             transition: background 0.2s, transform 0.1s;
             box-shadow: 0 4px 12px rgba(245, 130, 32, 0.25);
+            flex: 1;  /* Равная ширина */
+            text-align: center;
         }
 
         .btn-primary:hover {
@@ -199,11 +208,42 @@
             font-weight: 700;
             font-size: 14px;
             transition: all 0.2s;
+            flex: 1;  /* Равная ширина */
+            text-align: center;
         }
 
         .btn-secondary:hover {
             background: var(--dark-green);
             color: white;
+        }
+
+        .btn-ai {
+            background: linear-gradient(135deg, var(--ai-gradient-start) 0%, var(--ai-gradient-end) 100%);
+            color: white;
+            padding: 16px 30px;  /* Чуть больше вертикальный padding */
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(45, 70, 53, 0.3);
+            display: block;  /* Блочный элемент для полной ширины */
+            width: 100%;  /* На всю ширину контейнера */
+            text-align: center;
+            border: none;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+
+        .btn-ai:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 70, 53, 0.4);
+            background: linear-gradient(135deg, #1f3528 0%, #6f8a71 100%);  /* Чуть темнее при наведении */
+        }
+
+        .btn-ai i {
+            margin-right: 10px;
+            font-size: 16px;
         }
 
         .hero-visual {
@@ -231,7 +271,10 @@
 
             .hero-actions {
                 justify-content: center;
-                flex-wrap: wrap;
+            }
+
+            .btn-ai {
+                width: 100%;
             }
         }
 
@@ -246,6 +289,14 @@
 
             .btn-signup {
                 padding: 10px 20px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
             }
         }
     </style>
@@ -268,7 +319,7 @@
     <div class="nav-auth">
         {% if user.is_authenticated %}
         <div class="nav-user">
-            Hello, {{ user.username }}
+            <a href="{% url 'profile' %}" class="btn-secondary">My Profile</a>
         </div>
         {% else %}
         <a href="{% url 'login' %}" class="btn-login">LOG IN</a>
@@ -287,9 +338,13 @@
             </p>
 
             <div class="hero-actions">
-                <a href="ai-test" class="btn-primary">Explore Recipes</a>
+                <a href="#" class="btn-primary">Explore Recipes</a>
                 <a href="{% url 'profile' %}" class="btn-secondary">My Profile</a>
             </div>
+
+            <a href="/ai-test/" class="btn-ai">
+                <i class="fas fa-robot"></i> Ask AI Assistant
+            </a>
         </div>
 
         <div class="hero-visual">
