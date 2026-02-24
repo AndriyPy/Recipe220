@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>detail about recipe</title>
+    <title>{{ recipe_detail.title }}</title>
 </head>
 <body>
-{% if recipes %}
 
-     <pre>{{ recipe.recipe }}</pre>
+<h1>{{ recipe_detail.title }}</h1>
+
+<pre>{{ recipe_detail.recipe }}</pre>
 
 </body>
 </html>

@@ -116,5 +116,5 @@ def public_recipes(request):
 
 def detail_recipe(request, id):
     recipe = get_object_or_404(Recipes, id=id)
-    return render(request, "detail_recipe.html", {"recipe_detail":recipe})
+    return render(request, "ai/detail_recipe.html", {"recipe_detail":recipe})
 

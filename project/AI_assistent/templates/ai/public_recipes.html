@@ -15,6 +15,7 @@
             <p><strong>Author:</strong> {{ recipe.user.username }}</p>
             <p>{{ recipe.content|truncatewords:30 }}</p>
 
+            <a href="{% url 'recipe_detail' recipe.id %}">View full recipe</a>
         </div>
     {% endfor %}
 {% else %}

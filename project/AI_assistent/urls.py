@@ -7,5 +7,5 @@ urlpatterns = [
     path("delete/<int:id>", views.delete_recipe_view, name="ai_delete"),
     path("public_recipes/", views.public_recipes, name="public_recipes"),
     path("make_public/<int:id>", views.make_public, name="make_public"),
-    path("/detail_recipe/<int:id>", views.detail_recipe, name="detail_recipe")
+    path("/detail_recipe/<int:id>", views.detail_recipe, name="recipe_detail")
 ]
