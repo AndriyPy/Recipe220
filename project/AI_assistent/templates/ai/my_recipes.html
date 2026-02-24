@@ -57,10 +57,15 @@
                     <button type="submit" class="delete-btn">Delete</button>
                 </form>
             </div>
+    <form method="POST" action="{% url 'make_public' recipe.id %}">
+    {% csrf_token %}
+    <button type="submit">Make Public</button>
+</form>
         {% endfor %}
     {% else %}
         <p>You don't have saved recipes yet.</p>
     {% endif %}
+
 
     <a href="{% url 'ai_home' %}">Generate New Recipe</a>
 </div>

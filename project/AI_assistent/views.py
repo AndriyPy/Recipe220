@@ -78,8 +78,11 @@ INPUT TO PROCESS: {ingredients}"""}
             )
             recipe = response.choices[0].message.content
 
+            title = recipe.split("/n")[0].strip()
+
             if request.user.is_authenticated:
                 Recipes.objects.create(
+                    title=title,
                     user=request.user,
                     ingredients=ingredients,
                     recipe=recipe
@@ -98,3 +101,20 @@ def delete_recipe_view(request, id):
     recipe = get_object_or_404(Recipes, id=id, user=request.user)
     recipe.delete()
     return redirect("ai_history")
+
+@login_required()
+def make_public(request, id):
+    recipe = get_object_or_404(Recipes, id=id, user=request.user)
+    recipe.is_public = True
+    recipe.save()
+    return redirect("ai_history")
+
+
+def public_recipes(request):
+    recipes = Recipes.objects.filter(is_public=True).order_by("created_at")
+    return render(request, "ai/public_recipes.html", {"recipes":recipes})
+
+def detail_recipe(request, id):
+    recipe = get_object_or_404(Recipes, id=id)
+    return render(request, "detail_recipe.html", {"recipe_detail":recipe})
+
