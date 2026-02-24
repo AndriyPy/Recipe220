@@ -3,12 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ recipe_detail.title }}</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9f9f7;
+            color: #333;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2D4635;
+            margin-bottom: 25px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            text-decoration: none;
+            background: #F58220;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            background: #e3741c;
+        }
+    </style>
 </head>
 <body>
 
-<h1>{{ recipe_detail.title }}</h1>
+<div class="container">
+    <h1>{{ recipe_detail.title }}</h1>
 
-<pre>{{ recipe_detail.recipe }}</pre>
+    <pre>{{ recipe_detail.recipe }}</pre>
+
+    <a href="{% url 'public_recipes' %}" class="back-link">Back to Recipes</a>
+</div>
 
 </body>
 </html>
