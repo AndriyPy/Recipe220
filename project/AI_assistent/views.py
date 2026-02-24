@@ -78,7 +78,7 @@ INPUT TO PROCESS: {ingredients}"""}
             )
             recipe = response.choices[0].message.content
 
-            title = recipe.split("/n")[0].strip()
+            title = recipe.split("\n")[0]
 
             if request.user.is_authenticated:
                 Recipes.objects.create(
