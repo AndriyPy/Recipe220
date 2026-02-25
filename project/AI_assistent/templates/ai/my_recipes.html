@@ -1,118 +1,158 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Saved Recipes</title>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f9f9f7;
-            padding: 40px 20px;
-            color: #333;
-        }
+{% extends 'ai/base.html' %}
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
+{% block title %}My Saved Recipes{% endblock %}
 
-        h2 {
-            text-align: center;
-            color: #2D4635;
-            margin-bottom: 30px;
-        }
+{% block extra_head %}
+<style>
+    .recipes-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
+    .page-title {
+        text-align: center;
+        color: var(--dark-green);
+        font-family: 'Playfair Display', serif;
+        font-size: 36px;
+        margin-bottom: 35px;
+    }
 
-        pre {
-            white-space: pre-wrap;
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
+    .recipe-card {
+        background: white;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid var(--border-color);
+        animation: fadeInUp 0.5s ease-out;
+    }
 
-        .card-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
+    .recipe-meta {
+        font-size: 13px;
+        color: var(--text-gray);
+        margin-bottom: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            color: white;
-        }
+    .recipe-content {
+        white-space: pre-wrap;
+        background: #fcfcf9;
+        padding: 15px;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #444;
+        border: 1px solid #f0f0f0;
+    }
 
-        .btn-delete {
-            background: #e74c3c;
-        }
+    .card-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
 
-        .btn-public {
-            background: #F58220;
-        }
+    /* Використовуємо ваші стилі кнопок */
+    .btn-action {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
+    .btn-del {
+        background: #fbeaea;
+        color: #d9534f;
+    }
 
-        .generate-link {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            text-decoration: none;
-            background: #2D4635;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 700;
-        }
+    .btn-del:hover {
+        background: #d9534f;
+        color: white;
+    }
 
-        .generate-link:hover {
-            background: #1e2f27;
-        }
-    </style>
-</head>
-<body>
+    .btn-pub {
+        background: var(--primary-orange);
+        color: white;
+    }
 
-<div class="container">
-    <h2>My Saved Recipes</h2>
+    .btn-pub:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(245,130,32,0.3);
+    }
+
+    .generate-footer {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .btn-generate {
+        background: var(--dark-green);
+        color: white;
+        padding: 15px 35px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-generate:hover {
+        background: #1e2f27;
+        transform: scale(1.05);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="recipes-container">
+    <h2 class="page-title">My Saved Recipes</h2>
 
     {% if recipes %}
         {% for recipe in recipes %}
-            <div class="card">
-                <p><strong>Generated:</strong> {{ recipe.created_at|date:"F j, Y, H:i" }}</p>
+            <div class="recipe-card">
+                <div class="recipe-meta">
+                    <i class="far fa-calendar-alt"></i>
+                    Generated: {{ recipe.created_at|date:"F j, Y, H:i" }}
+                </div>
 
-                <pre>{{ recipe.recipe }}</pre>
+                <div class="recipe-content">{{ recipe.recipe }}</div>
 
                 <div class="card-buttons">
                     <form method="post" action="{% url 'ai_delete' recipe.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-delete">Delete</button>
+                        <button type="submit" class="btn-action btn-del">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
                     </form>
 
                     <form method="post" action="{% url 'make_public' recipe.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-public">Make Public</button>
+                        <button type="submit" class="btn-action btn-pub">
+                            <i class="fas fa-share-alt"></i> Make Public
+                        </button>
                     </form>
                 </div>
             </div>
         {% endfor %}
     {% else %}
-        <p style="text-align:center; color:#777;">You don't have saved recipes yet.</p>
+        <div class="recipe-card" style="text-align: center;">
+            <p style="color: var(--text-gray);">You don't have any saved recipes yet.</p>
+        </div>
     {% endif %}
 
-    <a href="{% url 'ai_home' %}" class="generate-link">Generate New Recipe</a>
+    <div class="generate-footer">
+        <a href="{% url 'ai_home' %}" class="btn-generate">
+            <i class="fas fa-plus"></i> Generate New Recipe
+        </a>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

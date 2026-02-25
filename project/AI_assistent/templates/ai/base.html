@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartRecipe{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-orange: #F58220;
+            --dark-green: #2D4635;
+            --light-green-bg: #89A08B;
+            --text-gray: #666;
+            --border-color: #E0E0E0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05); }
+        .logo-container { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; color: var(--dark-green); }
+        .logo-icon { color: var(--primary-orange); font-size: 26px; display: flex; align-items: center; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: #555; font-size: 14px; font-weight: 600; }
+        .nav-auth { display: flex; align-items: center; gap: 20px; }
+        .btn-login { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; padding: 8px 16px; }
+        .btn-signup { background: var(--primary-orange); color: white; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: 700; font-size: 13px; }
+
+        main { display: flex; flex: 1; }
+        .hero-section { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: center; padding-left: 80px; color: white; }
+        .hero-content h1 { font-size: 52px; line-height: 1.1; max-width: 450px; font-weight: 800; }
+        .hero-content h1 span { color: var(--primary-orange); }
+        .form-section { flex: 1; background: #F9F9F7; display: flex; justify-content: center; align-items: center; padding: 40px; }
+        .card { background: white; width: 100%; max-width: 450px; padding: 45px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); animation: fadeInUp 0.5s ease-out; }
+        .card h2 { color: var(--dark-green); font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 12px; }
+        .card p.subtitle { text-align: center; color: var(--text-gray); font-size: 15px; margin-bottom: 35px; }
+
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: #333; margin-bottom: 8px; text-transform: uppercase; }
+        .form-group input, .form-group select { width: 100%; padding: 14px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: #FDFDFD; font-size: 15px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary-orange); box-shadow: 0 0 0 2px rgba(245,130,32,0.1); }
+        .errorlist { color: #ff4d4d; list-style: none; font-size: 12px; padding: 0; margin-top: 5px; font-weight: 600; }
+        .non-field-errors { background-color: #FFF2F2; border: 1px solid #FFCDD2; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px; color: #D32F2F; font-size: 14px; }
+        .btn-submit { width: 100%; background: var(--primary-orange); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: all 0.3s ease; }
+        .btn-submit:hover { background: #e6741c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(245,130,32,0.3); }
+        .divider { display: flex; align-items: center; text-align: center; margin: 28px 0; color: #AAA; font-size: 11px; font-weight: 700; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #EEE; margin: 0 15px; }
+        .btn-google { width: 100%; background: white; border: 1px solid var(--border-color); padding: 14px; border-radius: 25px; display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; cursor: pointer; color: #333; text-decoration: none; transition: all 0.3s ease; }
+        .btn-google:hover { background: #f5f5f5; border-color: #ddd; }
+        .btn-google img { width: 20px; }
+        .login-footer { text-align: center; margin-top: 28px; font-size: 14px; color: #666; }
+        .login-footer a { color: var(--primary-orange); text-decoration: none; font-weight: 700; }
+        .login-footer a:hover { text-decoration: underline; }
+        @media (max-width: 900px) { .hero-section { display: none; } .card { padding: 30px 25px; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav>
+    <div class="logo-container">
+        <span class="logo-icon"><i class="fas fa-carrot"></i></span>
+        <span>SmartRecipe</span>
+    </div>
+    <div class="nav-links">
+        <a href="#">COMPASS</a>
+        <a href="/public_recipes">RECIPES</a>
+        <a href="#">DIET</a>
+        <a href="#">COMMUNITY</a>
+    </div>
+    <div class="nav-auth">
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="btn-login">PROFILE</a>
+            <a href="{% url 'logout' %}" class="btn-signup">LOG OUT</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn-login">LOG IN</a>
+            <a href="{% url 'registration' %}" class="btn-signup">SIGN UP</a>
+        {% endif %}
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+</body>
+</html>

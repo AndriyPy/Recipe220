@@ -1,79 +1,167 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>SmartRecipe AI</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f9f9f7;
-            padding: 40px;
-        }
+{% extends 'ai/base.html' %}
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
+{% block title %}AI Recipe Generator - SmartRecipe{% endblock %}
 
-        input {
-            width: 80%;
-            padding: 10px;
-        }
+{% block extra_head %}
+<style>
+    .ai-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
 
-        button {
-            padding: 10px 15px;
-            background: #F58220;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+    .generator-card {
+        background: white;
+        padding: 40px;
+        border-radius: 24px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        text-align: center;
+    }
 
-        pre {
-            white-space: pre-wrap;
-            background: #f4f4f4;
-            padding: 15px;
-            border-radius: 8px;
-        }
+    .generator-card h2 {
+        color: var(--dark-green);
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        margin-bottom: 25px;
+    }
 
-        .link {
-            margin-top: 20px;
-            display: inline-block;
-        }
-    </style>
-</head>
-<body>
+    .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
-<div class="container">
-    <h2>AI Recipe Generator</h2>
+    .input-group input {
+        flex: 1;
+        padding: 14px 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
 
-    <form method="get">
-        <input type="text" name="ingredients" placeholder="Enter ingredients..." required>
-        <button type="submit">Generate</button>
-    </form>
+    .input-group input:focus {
+        border-color: var(--primary-orange);
+    }
 
-    {% if recipe %}
-        <hr>
-        <h3>Generated Recipe</h3>
+    .btn-generate {
+        background: var(--primary-orange);
+        color: white;
+        border: none;
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        <pre>{{ recipe }}</pre>
+    .btn-generate:hover {
+        background: #e6741c;
+        transform: translateY(-2px);
+    }
 
-        {% if user.is_authenticated %}
-        <form method="post" action="{% url 'ai_history' %}">
-            {% csrf_token %}
-            <input type="hidden" name="ingredients" value="{{ request.GET.ingredients }}">
-            <input type="hidden" name="recipe" value="{{ recipe }}">
-            <button type="submit">Save Recipe</button>
+    .result-section {
+        margin-top: 30px;
+        text-align: left;
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .recipe-output {
+        white-space: pre-wrap;
+        background: #fcfcf9;
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px dashed var(--light-green-bg);
+        font-size: 15px;
+        color: #444;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .save-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f8fdf9;
+        padding: 15px 20px;
+        border-radius: 12px;
+    }
+
+    .btn-save {
+        background: var(--dark-green);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .history-link {
+        display: block;
+        margin-top: 25px;
+        text-decoration: none;
+        color: var(--text-gray);
+        font-weight: 600;
+        font-size: 14px;
+        transition: color 0.3s;
+    }
+
+    .history-link:hover {
+        color: var(--primary-orange);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="ai-container">
+    <div class="generator-card">
+        <h2>AI Recipe Generator</h2>
+        
+        <form method="get" class="input-group">
+            <input type="text" name="ingredients" 
+                   placeholder="Enter ingredients (e.g., chicken, tomato, basil)..." 
+                   value="{{ request.GET.ingredients }}" required>
+            <button type="submit" class="btn-generate">
+                <i class="fas fa-magic"></i> Generate
+            </button>
         </form>
-        {% else %}
-            <p><a href="{% url 'login' %}">Login</a> to save this recipe.</p>
+
+        {% if recipe %}
+            <div class="result-section">
+                <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 25px;">
+                <h3 style="color: var(--dark-green); margin-bottom: 15px;">Generated Recipe</h3>
+                
+                <div class="recipe-output">{{ recipe }}</div>
+
+                <div class="save-section">
+                    {% if user.is_authenticated %}
+                        <span style="font-size: 14px; color: var(--text-gray);">Love this recipe?</span>
+                        <form method="post" action="{% url 'ai_history' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="ingredients" value="{{ request.GET.ingredients }}">
+                            <input type="hidden" name="recipe" value="{{ recipe }}">
+                            <button type="submit" class="btn-save">
+                                <i class="fas fa-bookmark"></i> Save to My Recipes
+                            </button>
+                        </form>
+                    {% else %}
+                        <p style="font-size: 14px; margin: 0;">
+                            <a href="{% url 'login' %}" style="color: var(--primary-orange); font-weight: 700;">Login</a> 
+                            to save this recipe to your profile.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
         {% endif %}
-    {% endif %}
 
-    <a class="link" href="{% url 'ai_history' %}">My Saved Recipes</a>
+        <a class="history-link" href="{% url 'ai_history' %}">
+            <i class="fas fa-history"></i> View My Saved Recipes
+        </a>
+    </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
