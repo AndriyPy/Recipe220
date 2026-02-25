@@ -1,174 +1,163 @@
+{% extends 'users/base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartRecipe - Create Your Account</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-orange: #F58220;
-            --dark-green: #2D4635;
-            --light-green-bg: #89A08B;
-            --text-gray: #666;
-            --border-color: #E0E0E0;
-        }
+{% block title %}SmartRecipe - Create Your Account{% endblock %}
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { display: flex; flex-direction: column; min-height: 100vh; }
+{% block extra_head %}
+<style>
+    main { display: flex; flex: 1; }
+    .hero-section {
+        flex: 1;
+        position: relative;
+        background: linear-gradient(rgba(45, 70, 53, 0.7), rgba(45, 70, 53, 0.8)),
+        url('https://plus.unsplash.com/premium_photo-1676064229109-e95eb8e8a7bc?q=80&w=930&auto=format&fit=crop') center/cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 80px;
+        color: white;
+    }
+    .hero-content h1 { font-size: 52px; line-height: 1.1; max-width: 450px; font-weight: 800; }
+    .hero-content h1 span { color: var(--primary-orange); }
 
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 50px; background: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05); }
-        .logo-container { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 22px; color: var(--dark-green); }
-        .logo-icon { color: var(--primary-orange); font-size: 26px; display: flex; align-items: center; }
+    .form-section { flex: 1; background: #F9F9F7; display: flex; justify-content: center; align-items: center; padding: 40px; }
+    .card { background: white; width: 100%; max-width: 450px; padding: 45px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+    .card h2 { color: var(--dark-green); font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 12px; }
+    .card p.subtitle { text-align: center; color: var(--text-gray); font-size: 15px; margin-bottom: 35px; }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { text-decoration: none; color: #555; font-size: 14px; font-weight: 600; }
+    .form-group { margin-bottom: 22px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; color: #333; margin-bottom: 8px; text-transform: uppercase; }
 
-        .nav-auth { display: flex; align-items: center; gap: 20px; }
-        .btn-login { text-decoration: none; color: #000; font-weight: 700; font-size: 13px; padding: 8px 16px; }
-        .btn-signup { background: var(--primary-orange); color: white; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: 700; font-size: 13px; }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: #FDFDFD;
+        font-size: 15px;
+    }
 
-        main { display: flex; flex: 1; }
-        .hero-section { flex: 1; position: relative; background: linear-gradient(rgba(45, 70, 53, 0.7), rgba(45, 70, 53, 0.8)), url('https://plus.unsplash.com/premium_photo-1676064229109-e95eb8e8a7bc?q=80&w=930&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover; display: flex; flex-direction: column; justify-content: center; padding-left: 80px; color: white; }
-        .hero-content h1 { font-size: 52px; line-height: 1.1; max-width: 450px; font-weight: 800; }
-        .hero-content h1 span { color: var(--primary-orange); }
+    .errorlist { color: #ff4d4d; list-style: none; font-size: 12px; padding: 0; margin-top: 5px; }
 
-        .form-section { flex: 1; background: #F9F9F7; display: flex; justify-content: center; align-items: center; padding: 40px; }
-        .card { background: white; width: 100%; max-width: 450px; padding: 45px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
-        .card h2 { color: var(--dark-green); font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 12px; }
-        .card p.subtitle { text-align: center; color: var(--text-gray); font-size: 15px; margin-bottom: 35px; }
+    .btn-submit {
+        width: 100%;
+        background: var(--light-green-bg);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
 
-        .form-group { margin-bottom: 22px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; color: #333; margin-bottom: 8px; text-transform: uppercase; }
+    .divider { display: flex; align-items: center; text-align: center; margin: 28px 0; color: #AAA; font-size: 11px; font-weight: 700; }
+    .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #EEE; margin: 0 15px; }
 
-        /* Стилізація полів Django */
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: #FDFDFD;
-            font-size: 15px;
-        }
+    .btn-google {
+        width: 100%;
+        background: white;
+        border: 1px solid var(--border-color);
+        padding: 14px;
+        border-radius: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+    }
+    .btn-google img { width: 20px; }
+    .login-footer { text-align: center; margin-top: 28px; font-size: 14px; color: #666; }
+    .login-footer a { color: var(--primary-orange); text-decoration: none; font-weight: 700; }
 
-        .errorlist { color: #ff4d4d; list-style: none; font-size: 12px; padding: 0; margin-top: 5px; }
+    @media (max-width: 900px) { .hero-section { display: none; } }
+</style>
+{% endblock %}
 
-        .btn-submit { width: 100%; background: var(--light-green-bg); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        .divider { display: flex; align-items: center; text-align: center; margin: 28px 0; color: #AAA; font-size: 11px; font-weight: 700; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #EEE; margin: 0 15px; }
-
-        .btn-google { width: 100%; background: white; border: 1px solid var(--border-color); padding: 14px; border-radius: 25px; display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; cursor: pointer; color: #333; text-decoration: none; }
-        .btn-google img { width: 20px; }
-        .login-footer { text-align: center; margin-top: 28px; font-size: 14px; color: #666; }
-        .login-footer a { color: var(--primary-orange); text-decoration: none; font-weight: 700; }
-
-        @media (max-width: 900px) { .hero-section { display: none; } }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo-container">
-            <span class="logo-icon"><i class="fas fa-carrot"></i></span>
-            <span>SmartRecipe</span>
+{% block content %}
+<main>
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Fuel Your <span>Potential</span> With Every Bite.</h1>
+            <p class="hero-subtitle">"Elevate your plate, nourish your life."</p>
         </div>
-        <div class="nav-links">
-            <a href="#">COMPASS</a> <a href="#">RECIPES</a> <a href="#">DIET</a> <a href="#">COMMUNITY</a>
-        </div>
-        <div class="nav-auth">
-            <a href="{% url 'login' %}" class="btn-login">LOG IN</a>
-            <a href="{% url 'registration' %}" class="btn-signup">SIGN IN</a>
-        </div>
-    </nav>
+    </section>
 
-    <main>
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1>Fuel Your <span>Potential</span> With Every Bite.</h1>
-                <p class="hero-subtitle">"Elevate your plate, nourish your life."</p>
-            </div>
-        </section>
+    <section class="form-section">
+        <div class="card">
+            <h2>Create Your Account</h2>
+            <p class="subtitle">Join SmartRecipe and unlock tailored nutrition plans.</p>
 
-        <section class="form-section">
-            <div class="card">
-                <h2>Create Your Account</h2>
-                <p class="subtitle">Join SmartRecipe and unlock tailored nutrition plans.</p>
+            <form method="POST">
+                {% csrf_token %}
 
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <div class="form-group">
-                        <label>Username</label>
-                        {{ form.username }}
-                        {{ form.username.errors }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        {{ form.email }}
-                        {{ form.email.errors }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Gender</label>
-                        {{ form.gender }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Birth Date</label>
-                        {{ form.birth_date }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Country</label>
-                        {{ form.country }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Password</label>
-                        {{ form.password1 }}
-                        {{ form.password1.errors }}
-                    </div>
-
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        {{ form.password2 }}
-                        {{ form.password2.errors }}
-                    </div>
-
-
-
-                    <button type="submit" class="btn-submit">
-                        START HEALTHY JOURNEY &nbsp; <i class="fas fa-arrow-right"></i>
-                    </button>
-
-
-                    <div class="cf-turnstile"
-                        data-sitekey="{{ TURNSTILE_SITE_KEY }}">
-                    </div>
-
-                </form>
-
-
-
-                <div class="divider">OR SIGN UP WITH</div>
-
-                    <a href="/google_sso/login/" class="btn-google">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
-                        Continue with Google
-                    </a>
-
-
-                <div class="login-footer">
-                    Already have an account? <a href="{% url 'login' %}">Log in here</a>
+                <div class="form-group">
+                    <label>Username</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
                 </div>
-            </div>
-        </section>
-    </main>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
-</body>
-</html>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <div class="form-group">
+                    <label>Birth Date</label>
+                    {{ form.birth_date }}
+                </div>
+
+                <div class="form-group">
+                    <label>Country</label>
+                    {{ form.country }}
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    START HEALTHY JOURNEY &nbsp; <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}"></div>
+            </form>
+
+            <div class="divider">OR SIGN UP WITH</div>
+
+            <a href="/google_sso/login/" class="btn-google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
+                Continue with Google
+            </a>
+
+            <div class="login-footer">
+                Already have an account? <a href="{% url 'login' %}">Log in here</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+{% endblock %}

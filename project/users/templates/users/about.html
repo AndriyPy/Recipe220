@@ -1,90 +1,60 @@
+{% extends 'users/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartRecipe - About Us</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/jdx5Zczz/rounded-in-photoretrica.png">
-    <style>
-        *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-        :root{--orange:#F58220;--green:#2D4635;--light-green:#89A08B;--gray:#666;--border:#E0E0E0;--bg-light:#F9F9F7}
-        body{background:var(--bg-light);min-height:100vh;display:flex;flex-direction:column}
 
-        nav{display:flex;justify-content:space-between;align-items:center;padding:18px 60px;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 15px rgba(0,0,0,.05)}
-        .logo-container{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;color:var(--green)}
-        .logo-icon{color:var(--orange);font-size:26px}
-        .nav-links{display:flex;gap:30px}
-        .nav-links a{text-decoration:none;color:#555;font-size:14px;font-weight:600}
-        .nav-links a:hover,.nav-links a.active{color:var(--orange)}
-        .nav-auth{display:flex;align-items:center;gap:20px}
-        .btn-login{text-decoration:none;color:#000;font-weight:700;font-size:13px;padding:8px 16px}
-        .btn-signup{background:var(--orange);color:#fff;padding:10px 25px;border-radius:25px;text-decoration:none;font-weight:700;font-size:13px}
-        .nav-user{font-size:14px;font-weight:600;color:var(--green);background:rgba(137,160,139,.1);padding:8px 20px;border-radius:25px;border:1px solid rgba(45,70,53,.1)}
+{% block title %}SmartRecipe - About Us{% endblock %}
 
-        main{flex:1}
-        .hero{background:linear-gradient(rgba(45,70,53,.9),rgba(45,70,53,.9)),url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2080&auto=format&fit=crop');background-size:cover;background-position:center;padding:80px 20px;text-align:center;color:#fff}
-        .hero h1{font-family:'Playfair Display',serif;font-size:56px;margin-bottom:20px}
-        .hero h1 span{color:var(--orange)}
-        .hero p{font-size:20px;max-width:700px;margin:0 auto;opacity:.9}
+{% block extra_head %}
+<style>
+    /* Унікальні стилі для сторінки About */
+    .hero-about {
+        background: linear-gradient(rgba(45, 70, 53, 0.9), rgba(45, 70, 53, 0.9)),
+        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=2080&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        padding: 80px 20px;
+        text-align: center;
+        color: #fff;
+    }
+    .hero-about h1 { font-family: 'Playfair Display', serif; font-size: 56px; margin-bottom: 20px; }
+    .hero-about h1 span { color: var(--primary-orange); }
+    .hero-about p { font-size: 20px; max-width: 700px; margin: 0 auto; opacity: .9; }
 
-        .container{max-width:1200px;margin:0 auto;padding:60px 20px}
-        .section-title{font-family:'Playfair Display',serif;font-size:36px;color:var(--green);text-align:center;margin-bottom:50px}
-        .section-title span{color:var(--orange)}
+    .container-about { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--dark-green); text-align: center; margin-bottom: 50px; }
+    .section-title span { color: var(--primary-orange); }
 
-        .mission{background:#fff;border-radius:24px;padding:50px;margin-bottom:60px;box-shadow:0 10px 30px rgba(0,0,0,.05)}
-        .mission-text{font-size:18px;line-height:1.8;color:var(--gray);text-align:center;max-width:800px;margin:0 auto}
+    .mission { background: #fff; border-radius: 24px; padding: 50px; margin-bottom: 60px; box-shadow: 0 10px 30px rgba(0,0,0,.05); }
+    .mission-text { font-size: 18px; line-height: 1.8; color: var(--text-gray); text-align: center; max-width: 800px; margin: 0 auto; }
 
-        .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;margin-bottom:60px}
-        .feature-card{background:#fff;padding:40px 30px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.05);transition:.3s}
-        .feature-card:hover{transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,.1)}
-        .feature-icon{width:80px;height:80px;background:rgba(245,130,32,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;font-size:32px;color:var(--orange)}
-        .feature-card h3{font-size:22px;color:var(--green);margin-bottom:15px}
-        .feature-card p{color:var(--gray);line-height:1.6}
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
+    .feature-card { background:#fff; padding:40px 30px; border-radius:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.05); transition:.3s; }
+    .feature-card:hover { transform:translateY(-10px); box-shadow:0 20px 40px rgba(0,0,0,.1); }
+    .feature-icon { width:80px; height:80px; background:rgba(245,130,32,.1); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 25px; font-size:32px; color:var(--primary-orange); }
+    .feature-card h3 { font-size:22px; color:var(--dark-green); margin-bottom:15px; }
+    .feature-card p { color:var(--text-gray); line-height:1.6; }
 
-        .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;background:var(--green);border-radius:24px;padding:50px;margin-bottom:60px;color:#fff}
-        .stat-item{text-align:center}
-        .stat-number{font-size:48px;font-weight:700;color:var(--orange);margin-bottom:10px}
-        .stat-label{font-size:18px;opacity:.9}
+    .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; background: var(--dark-green); border-radius: 24px; padding: 50px; margin-bottom: 60px; color: #fff; }
+    .stat-item { text-align: center; }
+    .stat-number { font-size: 48px; font-weight: 700; color: var(--primary-orange); margin-bottom: 10px; }
+    .stat-label { font-size: 18px; opacity: .9; }
 
-        .cta{background:linear-gradient(135deg,var(--orange),#e6731a);border-radius:24px;padding:60px;text-align:center;color:#fff}
-        .cta h2{font-size:36px;margin-bottom:20px}
-        .cta p{font-size:18px;margin-bottom:30px;opacity:.9}
-        .cta-btn{display:inline-block;background:#fff;color:var(--orange);padding:15px 40px;border-radius:30px;text-decoration:none;font-weight:700;font-size:16px;transition:.3s}
-        .cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+    .cta-box { background: linear-gradient(135deg, var(--primary-orange), #e6731a); border-radius: 24px; padding: 60px; text-align: center; color: #fff; }
+    .cta-box h2 { font-size: 36px; margin-bottom: 20px; }
+    .cta-btn { display: inline-block; background: #fff; color: var(--primary-orange); padding: 15px 40px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: .3s; margin-top: 20px; }
+    .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
 
-        @media(max-width:900px){nav{padding:18px 30px}.nav-links{display:none}.hero h1{font-size:42px}.container{padding:40px 20px}}
-        @media(max-width:600px){.logo-container span:last-child{display:none}.nav-auth{gap:10px}.btn-signup{padding:10px 20px}}
-    </style>
-</head>
-<body>
-<nav>
-    <div class="logo-container"><span class="logo-icon"><i class="fas fa-carrot"></i></span><span>SmartRecipe</span></div>
-    <div class="nav-links">
-        <a href="#">RECIPES</a>
-        <a href="#">DIET</a>
-        <a href="#">COMMUNITY</a>
-        <a href="#" class="active">ABOUT</a>
-    </div>
-    <div class="nav-auth">
-        {% if user.is_authenticated %}
-        <div class="nav-user"><i class="fas fa-user-circle" style="margin-right:6px"></i>{{ user.username }}</div>
-        {% else %}
-        <a href="{% url 'login' %}" class="btn-login">LOG IN</a>
-        <a href="{% url 'registration' %}" class="btn-signup">SIGN UP</a>
-        {% endif %}
-    </div>
-</nav>
+    @media(max-width:900px){ .hero-about h1 { font-size: 42px; } }
+</style>
+{% endblock %}
 
+{% block content %}
 <main>
-    <section class="hero">
+    <section class="hero-about">
         <h1>About <span>SmartRecipe</span></h1>
         <p>Your AI-powered kitchen assistant that saves you time and eliminates the "what's for dinner?" struggle</p>
     </section>
 
-    <div class="container">
+    <div class="container-about">
         <div class="mission">
             <div class="mission-text">
                 <h2 class="section-title">Our <span>Mission</span></h2>
@@ -93,56 +63,55 @@
         </div>
 
         <h2 class="section-title">How <span>It Works</span></h2>
-        <div class="features">
+        <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-carrot"></i></div>
                 <h3>Enter Your Ingredients</h3>
-                <p>Type in whatever ingredients you have at home – from a fully stocked fridge to just a few random items. Our AI works with anything.</p>
+                <p>Type in whatever ingredients you have at home. Our AI works with anything from a full fridge to random pantry items.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-robot"></i></div>
                 <h3>AI-Powered Search</h3>
-                <p>Our smart algorithm analyzes your ingredients and instantly finds recipes you can make right now. No waste, no extra shopping trips.</p>
+                <p>Our algorithm analyzes your ingredients and instantly finds recipes you can make right now. No shopping needed.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-clock"></i></div>
                 <h3>Save Time & Stress</h3>
-                <p>Stop spending hours searching for recipes or deciding what to cook. Get personalized suggestions in seconds and get back to enjoying your day.</p>
+                <p>Stop spending hours deciding what to cook. Get personalized suggestions in seconds and enjoy your meal.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-utensils"></i></div>
                 <h3>Thousands of Recipes</h3>
-                <p>Access our database of recipes optimized for real home cooks. From quick weekday dinners to weekend projects – all searchable by what you have.</p>
+                <p>Access our database optimized for real home cooks. Find exactly what fits your mood and available stock.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-list"></i></div>
                 <h3>Smart Shopping Lists</h3>
-                <p>Planning a specific recipe? We'll generate a shopping list based on what you already have and what you need to buy.</p>
+                <p>Planning ahead? We'll generate lists based on what you have and what you actually need to buy.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon"><i class="fas fa-heart"></i></div>
                 <h3>Learn What You Love</h3>
-                <p>The more you use SmartRecipe, the better it gets. Our AI learns your taste preferences and dietary needs over time.</p>
+                <p>The more you use it, the better it gets. Our AI learns your taste preferences and dietary needs over time.</p>
             </div>
         </div>
 
-        <div class="stats">
+        <div class="stats-bar">
             <div class="stat-item"><div class="stat-number">150K+</div><div class="stat-label">Happy Cooks</div></div>
             <div class="stat-item"><div class="stat-number">2M+</div><div class="stat-label">Recipes Found</div></div>
             <div class="stat-item"><div class="stat-number">500K+</div><div class="stat-label">Hours Saved</div></div>
             <div class="stat-item"><div class="stat-number">4.8/5</div><div class="stat-label">User Rating</div></div>
         </div>
 
-        <div class="cta">
+        <div class="cta-box">
             <h2>Stop Wondering What's for Dinner</h2>
             <p>Join thousands of home cooks who've simplified their meal planning with SmartRecipe.</p>
             {% if user.is_authenticated %}
-            <a href="#" class="cta-btn">Find Recipes Now</a>
+            <a href="{% url 'ai_home' %}" class="cta-btn">Find Recipes Now</a>
             {% else %}
             <a href="{% url 'registration' %}" class="cta-btn">Start Cooking Smarter</a>
             {% endif %}
         </div>
     </div>
 </main>
-</body>
-</html>
+{% endblock %}

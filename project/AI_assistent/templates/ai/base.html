@@ -64,14 +64,16 @@
 </head>
 <body>
 <nav>
-    <div class="logo-container">
-        <span class="logo-icon"><i class="fas fa-carrot"></i></span>
-        <span>SmartRecipe</span>
-    </div>
+    <a href="{% url 'main' %}" style="text-decoration: none; display: flex; align-items: center;">
+        <div class="logo-container">
+            <span class="logo-icon"><i class="fas fa-carrot"></i></span>
+            <span>SmartRecipe</span>
+        </div>
+    </a>
     <div class="nav-links">
         <a href="#">COMPASS</a>
         <a href="/public_recipes">RECIPES</a>
-        <a href="#">DIET</a>
+        <a href="/about">ABOUT</a>
         <a href="#">COMMUNITY</a>
     </div>
     <div class="nav-auth">
