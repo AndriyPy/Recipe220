@@ -4,7 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .models import Recipes
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
 
+
+load_dotenv()
 
 
 def recipe_ai_view(request):
@@ -14,7 +18,7 @@ def recipe_ai_view(request):
     if ingredients:
         client = OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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",
+            api_key = os.getenv("OPENROUTER_API_KEY"),
         )
         try:
             response = client.chat.completions.create(
