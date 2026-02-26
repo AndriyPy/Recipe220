@@ -53,6 +53,14 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-submit:disabled {
+        background: #ccc;
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
     }
 
     .divider { display: flex; align-items: center; text-align: center; margin: 28px 0; color: #AAA; font-size: 11px; font-weight: 700; }
@@ -96,7 +104,7 @@
             <h2>Create Your Account</h2>
             <p class="subtitle">Join SmartRecipe and unlock tailored nutrition plans.</p>
 
-            <form method="POST">
+            <form method="POST" id="register-form">
                 {% csrf_token %}
 
                 <div class="form-group">
@@ -138,11 +146,16 @@
                     {{ form.password2.errors }}
                 </div>
 
-                <button type="submit" class="btn-submit">
+                <div style="margin-bottom: 20px;">
+                    <div class="cf-turnstile"
+                         data-sitekey="{{ TURNSTILE_SITE_KEY }}"
+                         data-callback="onTurnstileSuccess">
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-submit" disabled>
                     START HEALTHY JOURNEY &nbsp; <i class="fas fa-arrow-right"></i>
                 </button>
-
-                <div class="cf-turnstile" data-sitekey="{{ TURNSTILE_SITE_KEY }}"></div>
             </form>
 
             <div class="divider">OR SIGN UP WITH</div>
@@ -160,4 +173,9 @@
 </main>
 
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    function onTurnstileSuccess() {
+        document.getElementById('submit-btn').disabled = false;
+    }
+</script>
 {% endblock %}
