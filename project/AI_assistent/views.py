@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from openrouter import OpenRouter
 from django.contrib.auth.decorators import login_required
-from django.conf import settings
 from .models import Recipes
 from openai import OpenAI
 from dotenv import load_dotenv
