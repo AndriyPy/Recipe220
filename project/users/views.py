@@ -17,6 +17,23 @@ from django.conf import settings
 from django_ratelimit.decorators import ratelimit
 from rapidfuzz import process, fuzz
 
+from prometheus_client import Counter
+import logging
+import json
+
+logger = logging.getLogger("app_logger")
+
+recipes_created_total = Counter('recipes_created_total', 'Total number of recipes created')
+
+
+
+def create_recipe(request):
+
+    recipes_created_total.inc()
+    return render(request, 'all good')
+
+
+
 
 def verify_turnstile(token: str):
     """Check Cloudflare Turnstile token, return True if valid"""
@@ -43,8 +60,16 @@ def register_view(request: HttpRequest):
         token = request.POST.get("cf-turnstile-response")
 
         if not verify_turnstile(token):
+            logger.warning(json.dumps({
+                "event": "registration_blocked",
+                "reason": "bot_verification_failed",
+                "ip": request.META.get('REMOTE_ADDR')
+            }))
+
             messages.error(request, "Bot verification failed.")
+
             form = UserRegisterForm(request.POST)
+
             return render(request, "users/register.html", {
                 "form": form,
                 "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY
@@ -196,6 +221,7 @@ def edit_profile(request):
 @login_required(login_url=reverse_lazy('login'))
 def profile_view(request: HttpRequest):
     """Show user profile page"""
+    logger.info("profile is working")
     return render(request, "users/profile.html")
 
 
@@ -234,10 +260,11 @@ def recipe_list(request):
 
 
 def about_view(request: HttpRequest):
-    """Render About page"""
+    logger.info("page about is working")
     return render(request, "users/about.html")
 
 
 def main_page_view(request: HttpRequest):
     """Render homepage"""
+    logger.info("main page is working")
     return render(request, "users/main.html")
