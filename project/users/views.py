@@ -17,6 +17,22 @@ from django.conf import settings
 from django_ratelimit.decorators import ratelimit
 from rapidfuzz import process, fuzz
 
+from prometheus_client import Counter
+import logging
+
+logger = logging.getLogger("app_logger")
+
+recipes_created_total = Counter('recipes_created_total', 'Total number of recipes created')
+
+
+
+def create_recipe(request):
+
+    recipes_created_total.inc()
+    return render(request, 'all good')
+
+
+
 
 def verify_turnstile(token: str):
     """Check Cloudflare Turnstile token, return True if valid"""
@@ -234,7 +250,8 @@ def recipe_list(request):
 
 
 def about_view(request: HttpRequest):
-    """Render About page"""
+    logger.info("it's working")
+    logger.info("Sample log message sent to Loki", extra={"user_id": 123, "operation": "sample_view"})
     return render(request, "users/about.html")
 
 

@@ -5,7 +5,6 @@ from django.conf import settings
 from .models import Recipes
 
 
-
 def recipe_ai_view(request):
     recipe = None
     ingredients = request.GET.get("ingredients")
