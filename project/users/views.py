@@ -63,7 +63,6 @@ def register_view(request: HttpRequest):
             logger.warning(json.dumps({
                 "event": "registration_blocked",
                 "reason": "bot_verification_failed",
-                "ip": request.META.get('REMOTE_ADDR')
             }))
 
             messages.error(request, "Bot verification failed.")
@@ -81,31 +80,55 @@ def register_view(request: HttpRequest):
             user.is_active = False
             user.save()
 
-            code = str(random.randint(100000, 999999))
+            logger.info(json.dumps({
+                "event": "user_created",
+                "user_id": user.id,
+                "username": user.username
+            }))
 
-            verification = EmailVerification.objects.create(
-                user=user,
-                code=code,
-                expires_at=timezone.now() + timedelta(minutes=10)
-            )
+            try:
+                code = str(random.randint(100000, 999999))
 
-            email_message = EmailMessage(
-                subject='Email confirmation',
-                body=render_to_string(
-                    'mailing/email_verification.html',
-                    context={
-                        'code': code,
-                        'user': user,
-                    }
-                ),
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to=[user.email],
-            )
-            email_message.content_subtype = 'html'
-            email_message.send(fail_silently=False)
+                verification = EmailVerification.objects.create(
+                    user=user,
+                    code=code,
+                    expires_at=timezone.now() + timedelta(minutes=10)
+                )
 
-            request.session['verify_user_id'] = user.id
-            return redirect('verify_email')
+                email_message = EmailMessage(
+                    subject='Email confirmation',
+                    body=render_to_string(
+                        'mailing/email_verification.html',
+                        context={
+                            'code': code,
+                            'user': user,
+                        }
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to=[user.email],
+                )
+                email_message.content_subtype = 'html'
+                email_message.send(fail_silently=False)
+
+                logger.info(json.dumps({
+                    "event": "verification_email_sent",
+                    "user_id": user.id,
+                    "email": user.email
+                }))
+
+                request.session['verify_user_id'] = user.id
+
+                logger.info(f"user: {user.id} verified email")
+                return redirect('verify_email')
+
+            except Exception as e:
+                logger.error(json.dumps({
+                    "event": "registration_email_failed",
+                    "user_id": user.id,
+                    "error": str(e)
+                }), exc_info=True)
+
+                messages.error(request, "error main send.")
 
     else:
         form = UserRegisterForm()
@@ -117,9 +140,14 @@ def register_view(request: HttpRequest):
 def login_view(request: HttpRequest):
     """Handle user login with CAPTCHA verification"""
     if request.method == 'POST':
-
         token = request.POST.get("cf-turnstile-response")
+
         if not verify_turnstile(token):
+            logger.warning(json.dumps({
+                "event": "login_blocked",
+                "reason": "turnstile_failed"
+            }))
+
             messages.error(request, "Bot verification failed.")
             form = UserLoginForm(request.POST)
             return render(request, "users/login.html", {
@@ -131,7 +159,19 @@ def login_view(request: HttpRequest):
         if form.is_valid():
             user = form.cleaned_data['user']
             login(request, user)
+
+            logger.info(json.dumps({
+                "event": "login_success",
+                "user_id": user.id,
+                "username": user.username
+            }))
             return redirect('/')
+        else:
+            logger.warning(json.dumps({
+                "event": "login_failed",
+                "reason": "invalid_credentials",
+                "username_attempt": request.POST.get('username')
+            }))
     else:
         form = UserLoginForm()
 
@@ -142,6 +182,7 @@ def email_verification_view(request: HttpRequest):
     """Verify email code and activate user"""
     user_id = request.session.get("verify_user_id")
     if not user_id:
+        logger.warning(json.dumps({"event": "verification_failed_session_expired"}))
         messages.error(request, 'Session expired. Please register again.')
         return redirect("registration")
 
@@ -151,6 +192,7 @@ def email_verification_view(request: HttpRequest):
     ).order_by("-created_at").first()
 
     if not verification:
+        logger.warning(json.dumps({"event": "verification_failed_no_record", "user_id": user_id}))
         messages.error(request, 'Verification code not found or expired.')
         return redirect("registration")
 
@@ -158,6 +200,7 @@ def email_verification_view(request: HttpRequest):
         form = EmailVerificationForm(request.POST)
         if form.is_valid():
             if not verification.is_valid():
+                logger.warning(json.dumps({"event": "verification_failed_expired", "user_id": user_id}))
                 messages.error(request, 'Code has expired')
                 return redirect("registration")
 
@@ -171,10 +214,13 @@ def email_verification_view(request: HttpRequest):
 
                 request.session.pop("verify_user_id", None)
                 login(request, user)
+
+                logger.info(json.dumps({"event": "verification_success", "user_id": user.id}))
                 messages.success(request, 'Email verification has been successfully completed.')
 
                 return redirect("main")
             else:
+                logger.warning(json.dumps({"event": "verification_failed_invalid_code", "user_id": user_id}))
                 messages.error(request, 'The verification code you entered is invalid.')
     else:
         form = EmailVerificationForm()
@@ -191,6 +237,13 @@ def email_verification_view(request: HttpRequest):
 def logout_view(request: HttpRequest):
     """Log out user"""
     logout(request)
+
+    logger.info(json.dumps({
+        "event": "user_logout",
+        "user_id": request.user.id,
+        "username": request.user.username
+    }))
+
     return redirect('login')
 
 
@@ -206,7 +259,19 @@ def edit_profile(request):
             user.birth_date = form.cleaned_data.get('birth_date')
             user.country = form.cleaned_data.get('country')
             user.save()
+
+            logger.info(json.dumps({
+                "event": "profile_updated",
+                "user_id": user.id,
+                "username": user.username
+            }))
             return redirect("profile")
+
+        else:
+            logger.warning(json.dumps({
+                "event": "profile_update_failed",
+                "user_id": user.id,
+            }))
 
     else:
         form = UserEditProfileForm(initial={
@@ -221,7 +286,11 @@ def edit_profile(request):
 @login_required(login_url=reverse_lazy('login'))
 def profile_view(request: HttpRequest):
     """Show user profile page"""
-    logger.info("profile is working")
+    logger.info(json.dumps({
+        "event": "profile_viewed",
+        "user_id": request.user.id,
+        "username": request.user.username
+    }))
     return render(request, "users/profile.html")
 
 
@@ -260,11 +329,17 @@ def recipe_list(request):
 
 
 def about_view(request: HttpRequest):
-    logger.info("page about is working")
+    logger.info(json.dumps({
+        "event":"page_view",
+        "page": "about"
+    }))
     return render(request, "users/about.html")
 
 
 def main_page_view(request: HttpRequest):
     """Render homepage"""
-    logger.info("main page is working")
+    logger.info(json.dumps({
+        "event": "page_view",
+        "page": "main"
+    }))
     return render(request, "users/main.html")
