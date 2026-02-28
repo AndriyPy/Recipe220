@@ -22,7 +22,7 @@ Welcome to **Smart Recipe** — the delightful web experience powered by the Rec
 - [Database & Content](#database--content)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
+- [Developers](#developers)
 
 ---
 
@@ -32,3 +32,14 @@ Smart Recipe is a modern, friendly site built from the Recipe220 project. Its co
 Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 
 ---
+### Developers
+
+<div>
+  <a href="https://github.com/AndriyPy">
+    <img src="https://avatars.githubusercontent.com/u/187444054?v=4" width="100">
+  </a>
+
+  <a href="https://github.com/pypok-1">
+    <img src="https://avatars.githubusercontent.com/u/187442340?v=4" width="100">
+  </a>
+</div>
