@@ -4,6 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from .models import Recipes
 
+import logging
+import json
+
+logger = logging.getLogger("app_logger")
+
 
 
 def recipe_ai_view(request):
@@ -11,88 +16,108 @@ def recipe_ai_view(request):
     ingredients = request.GET.get("ingredients")
 
     if ingredients:
-        with OpenRouter(api_key=settings.OPEN_ROUTER) as client:
-            response = client.chat.send(
-                model="mistralai/mistral-7b-instruct",
-                messages=[
-                    {"role": "user",
-                     "content": f"""You are a professional recipe generator. Create a detailed recipe based on this request: "{ingredients}"
-
-FIRST, ANALYZE THE INPUT:
-- If the input contains ANY food-related words (like: make, cook, bake, prepare, recipe for, cake, eggs, butter, milk, flour, sugar, etc.), you MUST generate a recipe
-- Only reject if the input contains ZERO food items and is clearly non-food (furniture, electronics, office supplies, etc.)
-- Commands like "make a cake", "cook dinner", "bake cookies" ARE valid requests
-- Lists of ingredients like "eggs, butter, milk" ARE valid requests
-- Questions like "how to make pancakes" ARE valid requests
-- If in doubt, GENERATE A RECIPE (better to create something than to reject)
-
-STRICT FORMATTING RULES:
-1. First line MUST be ONLY the recipe name (no numbers, no "Recipe:" prefix, no quotes)
-2. Then ONE empty line
-3. Then "Ingredients:" on its own line
-4. Group ingredients by categories if needed (e.g., "For the cake:", "For the frosting:") with each category on its own line followed by ingredients indented with "- "
-5. Each ingredient MUST include specific quantities (cups, grams, tablespoons, etc.) - use standard measurements
-6. Then ONE empty line after all ingredients
-7. Then "Instructions:" on its own line
-8. Then numbered steps (1., 2., 3. etc.) with each step on a new line
-9. Instructions must be detailed, step-by-step, and easy for beginners to follow
-10. NO blank lines inside ingredients list or instructions list
-11. NO markdown symbols (*, #, -, ---) except the "- " for ingredients
-12. NO emojis
-13. NO additional text before or after the recipe
-14. NO explanations, NO tips, NO notes
-15. Recipe must be realistic and achievable with normal cooking techniques
-16. Use the provided ingredients as a base, but you CAN add additional common ingredients to make the recipe complete and delicious (salt, pepper, oil, baking powder, vanilla, etc.)
-
-EXAMPLE OF EXACT CORRECT FORMAT:
-Classic Butter Cake
-
-Ingredients:
-- 2 cups all-purpose flour
-- 1 cup granulated sugar
-- ½ cup unsalted butter, softened
-- 2 large eggs
-- ¾ cup milk
-- 2 teaspoons baking powder
-- 1 teaspoon vanilla extract
-- ¼ teaspoon salt
-
-Instructions:
-1. Preheat oven to 350°F. Grease a 9-inch cake pan.
-2. In a large bowl, cream butter and sugar until light and fluffy.
-3. Beat in eggs one at a time, then stir in vanilla.
-4. In a separate bowl, whisk flour, baking powder, and salt.
-5. Gradually add dry ingredients to wet mixture, alternating with milk.
-6. Pour batter into prepared pan and bake for 30-35 minutes.
-7. Let cool in pan for 10 minutes, then transfer to wire rack.
-
-If the input contains ABSOLUTELY NO food-related words (zero cooking terms, zero ingredients, only non-food items like "chair table lamp"), respond with ONE short humorous sentence ONLY. Examples:
-- "My kitchen runs on food, not furniture. Try again with actual ingredients!"
-- "I can't turn a chair into a cake. Need real food items here."
-- "Even my smart algorithms can't cook with office supplies. Got any food?"
-- "That's an interesting... snack? I'll wait for real ingredients."
-
-INPUT TO PROCESS: {ingredients}"""}
-                ],
-                max_tokens=600
-            )
-            recipe = response.choices[0].message.content
-
-            title = recipe.split("\n")[0]
-
-            if request.user.is_authenticated:
-                Recipes.objects.create(
-                    title=title,
-                    user=request.user,
-                    ingredients=ingredients,
-                    recipe=recipe
+        logger.info(json.dumps({
+            "event": "ai_recipe_request_started",
+            "ingredients_provided": ingredients[:50]
+        }))
+        try:
+            with OpenRouter(api_key=settings.OPEN_ROUTER) as client:
+                response = client.chat.send(
+                    model="google/gemini-2.0-flash-001",
+                    messages=[
+                        {"role": "user",
+                         "content": f"""You are a professional recipe generator. Create a detailed recipe based on this request: "{ingredients}"
+    
+    FIRST, ANALYZE THE INPUT:
+    - If the input contains ANY food-related words (like: make, cook, bake, prepare, recipe for, cake, eggs, butter, milk, flour, sugar, etc.), you MUST generate a recipe
+    - Only reject if the input contains ZERO food items and is clearly non-food (furniture, electronics, office supplies, etc.)
+    - Commands like "make a cake", "cook dinner", "bake cookies" ARE valid requests
+    - Lists of ingredients like "eggs, butter, milk" ARE valid requests
+    - Questions like "how to make pancakes" ARE valid requests
+    - If in doubt, GENERATE A RECIPE (better to create something than to reject)
+    
+    STRICT FORMATTING RULES:
+    1. First line MUST be ONLY the recipe name (no numbers, no "Recipe:" prefix, no quotes)
+    2. Then ONE empty line
+    3. Then "Ingredients:" on its own line
+    4. Group ingredients by categories if needed (e.g., "For the cake:", "For the frosting:") with each category on its own line followed by ingredients indented with "- "
+    5. Each ingredient MUST include specific quantities (cups, grams, tablespoons, etc.) - use standard measurements
+    6. Then ONE empty line after all ingredients
+    7. Then "Instructions:" on its own line
+    8. Then numbered steps (1., 2., 3. etc.) with each step on a new line
+    9. Instructions must be detailed, step-by-step, and easy for beginners to follow
+    10. NO blank lines inside ingredients list or instructions list
+    11. NO markdown symbols (*, #, -, ---) except the "- " for ingredients
+    12. NO emojis
+    13. NO additional text before or after the recipe
+    14. NO explanations, NO tips, NO notes
+    15. Recipe must be realistic and achievable with normal cooking techniques
+    16. Use the provided ingredients as a base, but you CAN add additional common ingredients to make the recipe complete and delicious (salt, pepper, oil, baking powder, vanilla, etc.)
+    
+    EXAMPLE OF EXACT CORRECT FORMAT:
+    Classic Butter Cake
+    
+    Ingredients:
+    - 2 cups all-purpose flour
+    - 1 cup granulated sugar
+    - ½ cup unsalted butter, softened
+    - 2 large eggs
+    - ¾ cup milk
+    - 2 teaspoons baking powder
+    - 1 teaspoon vanilla extract
+    - ¼ teaspoon salt
+    
+    Instructions:
+    1. Preheat oven to 350°F. Grease a 9-inch cake pan.
+    2. In a large bowl, cream butter and sugar until light and fluffy.
+    3. Beat in eggs one at a time, then stir in vanilla.
+    4. In a separate bowl, whisk flour, baking powder, and salt.
+    5. Gradually add dry ingredients to wet mixture, alternating with milk.
+    6. Pour batter into prepared pan and bake for 30-35 minutes.
+    7. Let cool in pan for 10 minutes, then transfer to wire rack.
+    
+    If the input contains ABSOLUTELY NO food-related words (zero cooking terms, zero ingredients, only non-food items like "chair table lamp"), respond with ONE short humorous sentence ONLY. Examples:
+    - "My kitchen runs on food, not furniture. Try again with actual ingredients!"
+    - "I can't turn a chair into a cake. Need real food items here."
+    - "Even my smart algorithms can't cook with office supplies. Got any food?"
+    - "That's an interesting... snack? I'll wait for real ingredients."
+    
+    INPUT TO PROCESS: {ingredients}"""}
+                    ],
+                    max_tokens=600
                 )
+                recipe = response.choices[0].message.content
+
+                title = recipe.split("\n")[0]
+
+                logger.info(json.dumps({
+                    "event": "ai_recipe_success",
+                }))
+
+                if request.user.is_authenticated:
+                    Recipes.objects.create(
+                        title=title,
+                        user=request.user,
+                        ingredients=ingredients,
+                        recipe=recipe
+                    )
+
+        except Exception as e:
+            logger.error(json.dumps({
+                "event": "ai_recipe_error",
+                "error_message": str(e)
+            }), exc_info=True)
 
     return render(request, "ai/recipe_ai.html", {"recipe": recipe})
 
 
 @login_required()
 def generated_recipe_view(request):
+    logger.info(json.dumps({
+        "event": "my_recipes_viewed",
+        "user_id": request.user.id,
+        "recipe_count": request.user.recipes.count()
+    }))
     recipes = request.user.recipes.all().order_by("-created_at")
     return render(request, "ai/my_recipes.html", {"recipes": recipes})
 
@@ -100,6 +125,13 @@ def generated_recipe_view(request):
 def delete_recipe_view(request, id):
     recipe = get_object_or_404(Recipes, id=id, user=request.user)
     recipe.delete()
+
+    logger.info(json.dumps({
+        "event": "recipe_deleted",
+        "user_id": request.user.id,
+        "recipe_id": recipe.id
+    }))
+
     return redirect("ai_history")
 
 @login_required()
@@ -107,14 +139,30 @@ def make_public(request, id):
     recipe = get_object_or_404(Recipes, id=id, user=request.user)
     recipe.is_public = True
     recipe.save()
+
+    logger.info(json.dumps({
+        "event": "published_recipe",
+        "user_id": request.user.id,
+        "recipe_id": recipe.id
+    }))
     return redirect("ai_history")
 
 
 def public_recipes(request):
     recipes = Recipes.objects.filter(is_public=True).order_by("created_at")
+    logger.info(json.dumps({
+        "event": "public_recipes",
+        "page": "about"
+    }))
     return render(request, "ai/public_recipes.html", {"recipes":recipes})
 
 def detail_recipe(request, id):
     recipe = get_object_or_404(Recipes, id=id)
+
+    logger.info(json.dumps({
+        "event": "detail_recipe",
+        "page": "about"
+    }))
+
     return render(request, "ai/detail_recipe.html", {"recipe_detail":recipe})
 
