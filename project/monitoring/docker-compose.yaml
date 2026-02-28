@@ -11,14 +11,26 @@ services:
     networks:
       - monitoring-net
     env_file:
-        - ../.env
+      - ../.env
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail-config.yaml:/etc/promtail/config.yaml:ro
+    command: -config.file=/etc/promtail/config.yaml
+    networks:
+      - monitoring-net
+    depends_on:
+      - loki
 
 
   loki:
     image: grafana/loki:latest
     command: -config.file=/etc/loki/config.yaml
     volumes:
-      - ./loki-config.yaml:/etc/loki/config.yaml
+      - ./loki-config.yaml:/etc/loki/config.yaml:r
       - loki_data:/loki
     ports:
       - "3100:3100"
@@ -62,6 +74,8 @@ services:
       - ./provisioning:/etc/grafana/provisioning:ro
     networks:
       - monitoring-net
+
+
 
 networks:
   monitoring-net:
