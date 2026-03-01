@@ -13,6 +13,19 @@ services:
     env_file:
       - ../.env
 
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - monitoring-net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
@@ -85,3 +98,4 @@ volumes:
   loki_data:
   prometheus_data:
   grafana_data:
+  postgres_data:
