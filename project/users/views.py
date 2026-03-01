@@ -248,14 +248,12 @@ def logout_view(request: HttpRequest):
 def edit_profile(request):
     """Edit user profile info"""
     user = request.user
+
     if request.method == "POST":
-        form = UserEditProfileForm(data=request.POST)
+        form = UserEditProfileForm(request.POST, instance=user)
+
         if form.is_valid():
-            user.username = form.cleaned_data.get('username')
-            user.gender = form.cleaned_data.get('gender')
-            user.birth_date = form.cleaned_data.get('birth_date')
-            user.country = form.cleaned_data.get('country')
-            user.save()
+            form.save()
 
             logger.info(json.dumps({
                 "event": "profile_updated",
@@ -263,22 +261,15 @@ def edit_profile(request):
                 "username": user.username
             }))
             return redirect("profile")
-
         else:
             logger.warning(json.dumps({
                 "event": "profile_update_failed",
                 "user_id": user.id,
             }))
-
     else:
-        form = UserEditProfileForm(initial={
-            'username': user.username,
-            'gender': user.gender,
-            'birth_date': user.birth_date,
-            'country': user.country})
+        form = UserEditProfileForm(instance=user)
 
     return render(request, "users/edit_profile.html", {"form": form})
-
 
 @login_required(login_url=reverse_lazy('login'))
 def profile_view(request: HttpRequest):
