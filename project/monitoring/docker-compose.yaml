@@ -20,7 +20,7 @@ services:
 
 
   backend:
-    container_name: app
+    container_name: backend
     build:
       context: ./Recipe220/project/
       dockerfile: ./Dockerfile
@@ -41,7 +41,7 @@ services:
     container_name: webserver
     restart: unless-stopped
     depends_on:
-      - app
+      - backend
     ports:
       - "8088:80"
       - "443:443"
@@ -125,7 +125,27 @@ networks:
   monitoring-net:
     driver: bridge
 
+
+#   certbot:
+ #    depends_on:
+ #      - webserver
+ #    image: certbot/dns-cloudflare
+ #    container_name: certbot
+ #    volumes:
+ #      - certbot-etc:/etc/letsencrypt
+ #      - ./cloudflare.ini:/root/cloudflare.ini
+ #    command: >-
+ #      certonly --dns-cloudflare
+ #      --dns-cloudflare-credentials /root/cloudflare.ini
+ #      --dns-cloudflare-propagation-seconds 30
+ #      --email admin@fixmymed.com
+ #      --agree-tos --no-eff-email
+ #      --force-renewal
+ #      -d recipe.algorithmux.com
+
+
 volumes:
+  certbot-etc:
   loki_data:
   prometheus_data:
   grafana_data:
