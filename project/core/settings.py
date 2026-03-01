@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'backend',
+    'recipe.algorithmux.com',
 ]
 
 OPEN_ROUTER = os.getenv("OPEN_ROUTER")
