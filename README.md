@@ -1,4 +1,4 @@
-# Smart Recipe 
+### <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWh2Z29nbG5xZG4zd282ZXlmYW5kaTN3cXIwZ292cWdlNGV4eXh4OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Pcvj0fxvnO4I0khDQX/giphy.gif" width="35"> Smart Recipe 
 
 ![Project: Recipe220](https://img.shields.io/badge/Project-Recipe220-blue?style=for-the-badge)
 ![Site: Smart Recipe](https://img.shields.io/badge/Site-Smart%20Recipe-orange?style=for-the-badge)
