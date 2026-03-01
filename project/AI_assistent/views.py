@@ -10,7 +10,6 @@ import json
 logger = logging.getLogger("app_logger")
 
 
-
 def recipe_ai_view(request):
     recipe = None
     ingredients = request.GET.get("ingredients")
@@ -121,6 +120,7 @@ def generated_recipe_view(request):
     recipes = request.user.recipes.all().order_by("-created_at")
     return render(request, "ai/my_recipes.html", {"recipes": recipes})
 
+
 @login_required()
 def delete_recipe_view(request, id):
     recipe = get_object_or_404(Recipes, id=id, user=request.user)
@@ -133,6 +133,7 @@ def delete_recipe_view(request, id):
     }))
 
     return redirect("ai_history")
+
 
 @login_required()
 def make_public(request, id):
@@ -155,6 +156,7 @@ def public_recipes(request):
         "page": "about"
     }))
     return render(request, "ai/public_recipes.html", {"recipes":recipes})
+
 
 def detail_recipe(request, id):
     recipe = get_object_or_404(Recipes, id=id)

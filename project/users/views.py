@@ -26,13 +26,10 @@ logger = logging.getLogger("app_logger")
 recipes_created_total = Counter('recipes_created_total', 'Total number of recipes created')
 
 
-
 def create_recipe(request):
 
     recipes_created_total.inc()
     return render(request, 'all good')
-
-
 
 
 def verify_turnstile(token: str):
