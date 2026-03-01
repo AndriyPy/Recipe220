@@ -32,6 +32,43 @@ Smart Recipe is a modern, friendly site built from the Recipe220 project. Its co
 Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 
 ---
+
+### Functionality
+
+### **User Management*
+- Registration with email verification (6-digit code)
+- Login with Cloudflare Turnstile (bot protection)
+- Google SSO authentication
+- Profile editing (gender, birth date, country)
+
+### **Recipes*
+- **Database**: 5,000+ recipes
+- **Search**: 
+  - Fuzzy search (typo-tolerant)
+  - Search by name and ingredients
+- **Sorting(SOON)**:  
+  - By name (A-Z, Z-A)
+  - By rating
+  - By cooking time
+  - By servings
+- **Recipe details(soon)** page with:
+  - Ingredients list
+  - Step-by-step instructions
+  - Preparation time
+  - Rating
+
+### **AI Assistant*
+- Generate recipes based on available ingredients
+- Personalized recommendations
+- OpenRouter AI integration
+
+### **Monitoring Stack*
+- **Grafana** — metrics visualization
+- **Prometheus** — metrics collection
+- **Loki** — log aggregation
+- **cAdvisor** — container monitoring
+- **Promtail** — log collection agent
+---
 ### Developers
 
 <div>
