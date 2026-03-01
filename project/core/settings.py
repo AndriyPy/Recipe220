@@ -32,6 +32,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://recipe.algorithmux.com",
+]
+
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
