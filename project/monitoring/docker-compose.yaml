@@ -22,7 +22,7 @@ services:
   backend:
     container_name: backend
     build:
-      context: ./Recipe220/project/
+      context: ./../
       dockerfile: ./Dockerfile
     env_file:
       - ./.env
@@ -53,9 +53,9 @@ services:
   postgres_exporter:
     image: quay.io/prometheuscommunity/postgres-exporter
     environment:
-      DATA_SOURCE_NAME: "postgresql://postgres:splsqleap@postgres_db:5432/smartrecipe_db?sslmode=disable"
-    networks:
-      - monitoring-net
+      DATA_SOURCE_NAME: "postgresql://postgres:splsqleap@db:5432/smartrecipe_db?sslmode=disable"
+#    networks:
+#      - monitoring-net
     depends_on:
       - db
 
@@ -66,8 +66,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./promtail-config.yaml:/etc/promtail/config.yaml:ro
     command: -config.file=/etc/promtail/config.yaml
-    networks:
-      - monitoring-net
+#    networks:
+#      - monitoring-net
     depends_on:
       - loki
 
@@ -80,10 +80,11 @@ services:
       - loki_data:/loki
     ports:
       - "3100:3100"
-    networks:
-      - monitoring-net
+#    networks:
+#      - monitoring-net
 
   prometheus:
+    container_name: prometheus
     image: prom/prometheus:latest
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -92,8 +93,8 @@ services:
       - "9090:9090"
     depends_on:
       - backend
-    networks:
-      - monitoring-net
+#    networks:
+#      - monitoring-net
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -106,10 +107,11 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
-    networks:
-      - monitoring-net
+#    networks:
+#      - monitoring-net
 
   grafana:
+    container_name: grafana
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
@@ -118,30 +120,31 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./provisioning:/etc/grafana/provisioning:ro
-    networks:
-      - monitoring-net
+#    networks:
+#      - monitoring-net
 
-networks:
-  monitoring-net:
-    driver: bridge
+#networks:
+#  monitoring-net:
+#    driver: bridge
 
 
-#   certbot:
- #    depends_on:
- #      - webserver
- #    image: certbot/dns-cloudflare
- #    container_name: certbot
- #    volumes:
- #      - certbot-etc:/etc/letsencrypt
- #      - ./cloudflare.ini:/root/cloudflare.ini
- #    command: >-
- #      certonly --dns-cloudflare
- #      --dns-cloudflare-credentials /root/cloudflare.ini
- #      --dns-cloudflare-propagation-seconds 30
- #      --email admin@fixmymed.com
- #      --agree-tos --no-eff-email
- #      --force-renewal
- #      -d recipe.algorithmux.com
+#  certbot:
+#     depends_on:
+#       - webserver
+#     image: certbot/dns-cloudflare
+#     container_name: certbot
+#     volumes:
+#       - certbot-etc:/etc/letsencrypt
+#       - ./cloudflare.ini:/root/cloudflare.ini
+#     command: >-
+#       certonly --dns-cloudflare
+#       --dns-cloudflare-credentials /root/cloudflare.ini
+#       --dns-cloudflare-propagation-seconds 30
+#       --email admin@fixmymed.com
+#       --agree-tos --no-eff-email
+#       --force-renewal
+#       --cert-name algorithmux-multi
+#       -d '*.algorithmux.com'
 
 
 volumes:
