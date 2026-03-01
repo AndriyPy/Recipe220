@@ -27,6 +27,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  postgres_exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:splsqleap@postgres_db:5432/smartrecipe_db?sslmode=disable"
+    networks:
+      - monitoring-net
+    depends_on:
+      - db
+
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
