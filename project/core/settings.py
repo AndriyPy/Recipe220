@@ -33,7 +33,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://*a.lgorithmux.com",
     "https://recipe.algorithmux.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000"
 ]
 
 ALLOWED_HOSTS = [
