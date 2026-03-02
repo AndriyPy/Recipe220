@@ -133,7 +133,7 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 
 ### 🐳 Docker Installation (Recommended)
 
-```bash
+ **bash*
 # Clone the repository
 git clone https://github.com/AndriyPy/Recipe220.git
 cd Recipe220
