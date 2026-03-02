@@ -129,40 +129,40 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 
 ### Prerequisites
 
-*   **Docker & Docker Compose** (рекомендуется)
-*   **Python 3.11+** (для локального запуска)
+*   **Docker & Docker Compose** (recommended)
+*   **Python 3.11+** (for local launch))
 *   **PostgreSQL 15+**
 
 ### Install & Run
 
-1.  **Клонируйте репозиторий:**
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com
     cd Recipe220
     ```
 
 2.  **Настройте переменные окружения:**
-    Создайте файл `.env` в корневой папке и добавьте необходимые ключи (OpenRouter API, Google Credentials, DB settings):
+    Create a `.env` file in the root folder and add the necessary keys (OpenRouter API, Google Credentials, DB settings):
     ```bash
     cp .env.example .env
     ```
 
-3.  **Запуск через Docker (самый быстрый способ):**
+3.  **Launch via Docker (the fastest way):**
     ```bash
     docker-compose up --build
     ```
 
-4.  **Локальный запуск (без Docker):**
-    *   Создайте виртуальное окружение:
+4.  **Local launch (without Docker):**
+    *   Create a virtual environment:
         ```bash
         python -m venv venv
         source venv/bin/activate  # Для Windows: venv\Scripts\activate
         ```
-    *   Установите зависимости:
+    *   Set dependencies:
         ```bash
         pip install -r requirements.txt
         ```
-    *   Запустите приложение:
+    *   Launch the application:
         ```bash
         python main.py
         ```
