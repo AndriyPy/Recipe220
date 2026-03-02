@@ -28,7 +28,7 @@ Welcome to **Smart Recipe** — the delightful web experience powered by the Rec
 - [Key Features](#key-features)
 - [How It Works](#how-it-works)
 - [Tech Stack](#tech-stack)
-- [Quick Start](#quick Start)
+- [Quick Start](#quick-Start)
   - [Prerequisites](#prerequisites)
   - [Install & Run](#install--run)
 - [Prerequisites](#prerequisites)
