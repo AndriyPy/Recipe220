@@ -28,12 +28,9 @@ Welcome to **Smart Recipe** — the delightful web experience powered by the Rec
 - [Key Features](#key-features)
 - [How It Works](#how-it-works)
 - [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
+- [Quick Start](#quick Start)
   - [Prerequisites](#prerequisites)
   - [Install & Run](#install--run)
-- [Usage Examples](#usage-examples)
-- [Database & Content](#database--content)
-- [Contributing](#contributing)
 - [Prerequisites](#prerequisites)
 - [Developers](#developers)
 
@@ -125,6 +122,30 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
     </tr>
   </table>
 </div>
+---
+
+## Quick Start
+
+### Prerequisites
+- Docker 24.0+
+- Python 3.11+
+- PostgreSQL 15+
+
+### 🐳 Docker Installation (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/AndriyPy/Recipe220.git
+cd Recipe220
+
+# Create environment file
+cp .env.example .env
+
+# Edit .env with your configuration
+nano .env
+
+# Build and run with Docker Compose
+docker-compose up --build -d
 
 ---
 
