@@ -176,10 +176,63 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 | Docker | 24.0+ | ![Docker](https://img.shields.io/badge/Docker-24.0+-2496ED?logo=docker) |
 | Python | 3.11+ | ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python) |
 | PostgreSQL | 15+ | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?logo=postgresql) |
+---
+
+## Tech Stack
+
+<details>
+<summary><b>Click to expand full tech stack</b></summary>
+
+### **Backend**
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Django-4.2-092E20?style=for-the-badge&logo=django&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gunicorn-20.1-499848?style=for-the-badge&logo=gunicorn&logoColor=white" />
+</p>
+
+### **Frontend**
+<p align="center">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/Font_Awesome-528DD7?style=for-the-badge&logo=font-awesome&logoColor=white" />
+</p>
+
+### **DevOps**
+<p align="center">
+  <img src="https://img.shields.io/badge/Docker-24.0-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Docker_Compose-✓-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
+</p>
+
+### **Monitoring**
+<p align="center">
+  <img src="https://img.shields.io/badge/Grafana-10.2-F46800?style=for-the-badge&logo=grafana&logoColor=white" />
+  <img src="https://img.shields.io/badge/Prometheus-2.48-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" />
+  <img src="https://img.shields.io/badge/Loki-2.9-FFA500?style=for-the-badge&logo=grafana&logoColor=white" />
+  <img src="https://img.shields.io/badge/cAdvisor-✓-00ADD8?style=for-the-badge&logo=google&logoColor=white" />
+</p>
+
+### **Integrations**
+<p align="center">
+  <img src="https://img.shields.io/badge/Cloudflare_Turnstile-F38020?style=for-the-badge&logo=cloudflare&logoColor=white" />
+  <img src="https://img.shields.io/badge/Google_SSO-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/OpenRouter_AI-412991?style=for-the-badge&logo=openai&logoColor=white" />
+  <img src="https://img.shields.io/badge/SMTP-✓-EA4335?style=for-the-badge&logo=gmail&logoColor=white" />
+</p>
+</details>
 
 ---
 
 ### Developers
+
+<div align="center">
+  <br />
+  <img src="https://img.shields.io/badge/%20TEAM-F58220?style=for-the-badge" />
+  <br /><br />
+
 
 <div>
   <a href="https://github.com/AndriyPy">
@@ -189,4 +242,4 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
   <a href="https://github.com/pypok-1">
     <img src="https://avatars.githubusercontent.com/u/187442340?v=4" width="100">
   </a>
-</div>
+</div>>
