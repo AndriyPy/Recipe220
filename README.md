@@ -125,7 +125,7 @@ Project repository: [Recipe220](https://github.com/AndriyPy/Recipe220)
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
